@@ -1,10 +1,10 @@
 Chapter 3:
-===========
+==========
 
 In this chapter we will be dealing with the creation of URLs
 
 Creating URLs
---------------
+-------------
 
 It's time to wire up the views to specific URLs
 
