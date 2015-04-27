@@ -1,6 +1,8 @@
 Buidling APIs with Django, DRF, Apiary, CircleCI, Heroku and more
 ==================================================================
 
+[Read it online](http://djangoapibook.readthedocs.org/)
+
 An opinionated guide to building APIs with modern tools.
 A retelling of Django tutorial with microservices and documentation driven development.
 
