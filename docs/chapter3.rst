@@ -133,3 +133,55 @@ Also, dont forget to give excemption to UserCreate view by overriding the global
         serializer_class = UserSerializer
 
 All done, so from now the user needs to be an 'authenticated user' to access our poll and the poll data.
+
+Exceptional handling
+---------------------
+
+Now, let us deal with exception handling which will make our code to work perfect at all situations. Take an instance of a user trying to select a choice that is not availble in choice list and our application should not get freezed or turn buggy. At this point we can make use of 'ValidationError' class which can be used for serializer and field validations.
+
+The model Serializer class in Django Rest Framework has the default implementations of '.create()' and '.update()'. We can make use fo the '.create()' here. Let us do it right away in the pollsapi/serializers.py.
+
+.. code-block:: python
+
+    class VoteSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Vote
+            validators=[
+                UniqueTogetherValidator(
+                    queryset=Vote.objects.all(),
+                    fields=('poll', 'voted_by'),
+                    message="User already voted for this poll"
+                )
+            ]
+
+        def create(self, validated_data):
+            poll = validated_data["poll"]
+            choice = validated_data["choice"]
+            if not choice in poll.choices.all():
+                raise serializers.ValidationError('Choice must be valid.')
+            vote = super(VoteSerializer, self).create(validated_data)
+            return vote
+
+In the above lines of code in the 'create()' we were checking whether the selected choice is a valid one or not. And if turns to be false a validation error will be raised.
+
+We have got another place where we need to handle an exception. If the user forgot to create the choices while starting a new poll an exception needs to be raised that the choices needs to be created as well. For that, make the below changes in the PollSerializer method in the pollsapi/serializers.py
+
+.. code-block:: python
+
+    class PollSerializer(serializers.ModelSerializer):
+    choices = ChoiceSerializer(many=True, read_only=True, required=False)
+
+    class Meta:
+        model = Poll
+
+    def create(self, validated_data):
+        choice_strings = self.context.get("request").data.get("choice_strings")
+        if not choice_strings:
+            raise serializers.ValidationError('choice_strings needed.')
+        poll = super(PollSerializer, self).create(validated_data)
+        for choice in choice_strings:
+            Choice.objects.create(poll=poll, choice_text=choice)
+        return poll
+
+So the above fixes makes sure that no bugs comes to light and turns the code to run smooth.
+
