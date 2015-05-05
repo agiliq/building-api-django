@@ -162,6 +162,68 @@ Let us try creating a new poll by sending the 'question', 'choice_strings' and '
 And the above function should result us the http code 201 if the test passes succesfully. And we are all done with the stuff. Time to celebrate with the API :)
 
 
+Continuous integration with CircleCI
+---------------------------------------
+
+Maintaining a solid rapport with the ongoing software development process always turns out to be a walk on air. Ensuring a software build integrity and quality in every single commit makes it much more exciting.
+
+If the current software bulid is constantly available for testing, demo or release isn't it a developer's paradise on earth?
+Giving a cold shoulder to "Integration hell" the 'Continuous integration' process stands out to deliver all the above assets.
+
+Let us use circle CI software for our App. 
+
+We can configure our application to use Circle CI  by adding a file named circle.yml which is a YAML(a human-readable data serialization format) text file. It automatically detects when a commit has been made and pushed to a GitHub repository that is using Circle CI, and each time this happens, it will try to build the project and runs tests. It also builds and once it is completed it notifies the developer in the way it is configured.
+
+Steps to use Circle CI:
+
+- Sign-in: To get started with Circle CI we can sign-in with our github account on circleci.com.
+- Activate Github webhook: Once the Signup process gets completed we need to enable the service hook in the github profile page.
+- Add circle.yml: We should add the yml file to the project.
+
+Writing circle.yml file
+------------------------
+In order for circle CI to build our project we need to tell the system a little bit about it. we will be needed to add a file named circle.yml to the root of our repository. The basic options in the circle.yml should contain are language key which tells which language environment to select for our project and other options include the version of the language and command to run the tests, etc.
+
+Below are the keywords that are used in writting circle.yml file.
+
+- machine: adjusting the VM to your preferences and requirements
+- checkout: checking out and cloning your git repo
+- dependencies: setting up your project's language-specific dependencies
+- database: preparing the databases for your tests
+- test: running your tests
+- deployment: deploying your code to your web servers
+
+
+- pre: commands run before CircleCI's inferred commands
+- override: commands run instead of CircleCI's inferred commands
+- post: commands run after CircleCI's inferred commands
+
+
+Example for circle.yml for python project:
+
+.. code-block:: python
+
+    ## Customize the test machine
+    machine:
+
+      timezone:
+        Asia/Kolkata # Set the timezone
+
+      # Version of python to use
+      python:
+        version: 2.7.5
+
+    dependencies:
+      pre:
+        - pip install -r requirements.txt
+
+    test:
+      override:
+        - python manage.py test
+
+From now onwards whenever we push our code to our repository a new build will be created for it and the running of the test cases will be taken place. It gives us the potential to check how good our development process is taking place with out hitting a failed test case. 
+
+
 
 
 
