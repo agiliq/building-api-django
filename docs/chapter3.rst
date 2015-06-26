@@ -66,20 +66,20 @@ Let us also add views to the User Serializer for creating and retrieving the use
 .. code-block:: python
 
     class UserCreate(generics.CreateAPIView):
-            """
-            Create an User
-            """
+        """
+        Create an User
+        """
 
-            serializer_class = UserSerializer
+        serializer_class = UserSerializer
 
 
-        class UserDetail(generics.RetrieveAPIView):
-            """
-            Retrieve a User
-            """
+    class UserDetail(generics.RetrieveAPIView):
+        """
+        Retrieve a User
+        """
 
-            queryset = User.objects.all()
-            serializer_class = UserSerializer 
+        queryset = User.objects.all()
+        serializer_class = UserSerializer 
 
 Let us create a URL for accessing the detail info about the user. For that access the urls.py file and wire up the following User URL.
 
@@ -169,19 +169,19 @@ We have got another place where we need to handle an exception. If the user forg
 .. code-block:: python
 
     class PollSerializer(serializers.ModelSerializer):
-    choices = ChoiceSerializer(many=True, read_only=True, required=False)
-
-    class Meta:
-        model = Poll
-
-    def create(self, validated_data):
-        choice_strings = self.context.get("request").data.get("choice_strings")
-        if not choice_strings:
-            raise serializers.ValidationError('choice_strings needed.')
-        poll = super(PollSerializer, self).create(validated_data)
-        for choice in choice_strings:
-            Choice.objects.create(poll=poll, choice_text=choice)
-        return poll
+        choices = ChoiceSerializer(many=True, read_only=True, required=False)
+    
+        class Meta:
+            model = Poll
+    
+        def create(self, validated_data):
+            choice_strings = self.context.get("request").data.get("choice_strings")
+            if not choice_strings:
+                raise serializers.ValidationError('choice_strings needed.')
+            poll = super(PollSerializer, self).create(validated_data)
+            for choice in choice_strings:
+                Choice.objects.create(poll=poll, choice_text=choice)
+            return poll
 
 So the above fixes makes sure that no bugs comes to light and turns the code to run smooth.
 
