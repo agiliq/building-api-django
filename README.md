@@ -22,11 +22,8 @@ Chapters
 
 * The importance of Documentation driven development and summary of API we will need
 * What we will build and the API
-* Testing and CI: Introduce Django testing, language agnostic API testing and CircleCI
-* Models and Admin (Probably the same as Django tutorial)
-* Building API with Django-Rest-Framework
-* Authentication and access control with DRF
+* [Models and Admin (Probably the same as Django tutorial)](http://djangoapibook.readthedocs.org/en/latest/chapter1.html)
+* [Building API with Django-Rest-Framework](http://djangoapibook.readthedocs.org/en/latest/chapter2.html)
+* [Authentication and access control with DRF](http://djangoapibook.readthedocs.org/en/latest/chapter3.html)
+* [Testing and CI: Introduction to Django testing, language agnostic API testing and CircleCI](http://djangoapibook.readthedocs.org/en/latest/chapter4.html)
 * Consuming and collaborating with API: Introduce Postman, ngrok, angular
-
-
-
