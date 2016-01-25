@@ -42,7 +42,7 @@ The following are the on we are going to deal with:
 Initially we should need representaions for User and for that let us create one in the serializers.py. Add the following code snippet to our serializers file.
 
 .. code-block:: python
-    
+
     class UserSerializer(serializers.ModelSerializer):
 
         class Meta:
@@ -59,7 +59,7 @@ Initially we should need representaions for User and for that let us create one 
             user.save()
             return user
 
-In the above lines of code we used the ModelSerializer method's 'create()' to save the 'User' instances. 
+In the above lines of code we used the ModelSerializer method's 'create()' to save the 'User' instances.
 
 Let us also add views to the User Serializer for creating and retrieving the user.
 
@@ -79,7 +79,7 @@ Let us also add views to the User Serializer for creating and retrieving the use
         """
 
         queryset = User.objects.all()
-        serializer_class = UserSerializer 
+        serializer_class = UserSerializer
 
 Let us create a URL for accessing the detail info about the user. For that access the urls.py file and wire up the following User URL.
 
@@ -170,10 +170,10 @@ We have got another place where we need to handle an exception. If the user forg
 
     class PollSerializer(serializers.ModelSerializer):
         choices = ChoiceSerializer(many=True, read_only=True, required=False)
-    
+
         class Meta:
             model = Poll
-    
+
         def create(self, validated_data):
             choice_strings = self.context.get("request").data.get("choice_strings")
             if not choice_strings:
