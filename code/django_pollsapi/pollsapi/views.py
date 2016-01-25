@@ -53,10 +53,10 @@ class UserCreate(generics.CreateAPIView):
         serializer_class = UserSerializer
 
 
-    class UserDetail(generics.RetrieveAPIView):
-        """
-        Retrieve a User
-        """
+class UserDetail(generics.RetrieveAPIView):
+    """
+    Retrieve a User
+    """
 
-        queryset = User.objects.all()
-        serializer_class = UserSerializer
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

@@ -12,18 +12,6 @@ class ChoiceSerializer(serializers.ModelSerializer):
         model = Choice
 
 
-class PollSerializer(serializers.ModelSerializer):
-    choices = ChoiceSerializer(many=True, read_only=True, required=False)
-
-    class Meta:
-        model = Poll
-
-
-class VoteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Vote
-
-
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -39,23 +27,6 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
-
-
-class UserCreate(generics.CreateAPIView):
-        """
-        Create an User
-        """
-
-        serializer_class = UserSerializer
-
-
-class UserDetail(generics.RetrieveAPIView):
-    """
-    Retrieve a User
-    """
-
-    queryset = User.objects.all()
-        serializer_class = UserSerializer
 
 
 class VoteSerializer(serializers.ModelSerializer):
