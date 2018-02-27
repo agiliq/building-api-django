@@ -1,9 +1,4 @@
-.. Building API Django documentation master file, created by
-   sphinx-quickstart on Thu Apr 23 19:31:51 2015.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Welcome to Building a Django Polls API documentation!
+Building a Django polls API with DRF
 ======================================================
 
 Contents:

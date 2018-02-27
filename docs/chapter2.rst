@@ -1,5 +1,5 @@
-Chapter 2:
-==========
+Serialiers and APIViews
+========================================
 
 Django-rest-framework makes the process of building web API's simple and flexible. With its batteries included it won't be a tedious task to create an API.
 
@@ -33,7 +33,7 @@ Lets get started with creating serializer class which will serialize and deseria
 
     class PollSerializer(serializers.ModelSerializer):
         choices = ChoiceSerializer(many=True, read_only=True, required=False)
-        
+
         class Meta:
             model = Poll
 
@@ -99,5 +99,5 @@ When writting a generic view we will override the view and set several calss att
 
 Let us have a look in to the important parts in the code.
 
-- queryset: This will be used to return objects from the view. 
+- queryset: This will be used to return objects from the view.
 - serializer_class: This will be used for validating and deserializing the input and for seraizling the output.

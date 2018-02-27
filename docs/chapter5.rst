@@ -1,5 +1,5 @@
-Chapter 5
-==============
+Documenting APIs with Swagger
+=============================
 
 In this chapater we will see how to use swagger for all the views of our API.
 

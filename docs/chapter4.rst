@@ -1,5 +1,6 @@
-Chapter 4
-==============
+Testing and Continuous Integeration
+==========================================
+
 
 In this chapater we will test all the views of our API.
 
@@ -79,7 +80,7 @@ Testing authentication
 
 To test authentication, a test user needs to be created so that we can check whether the authentication is working smooth. Let's right away create a test user. Save the following code in pollsapi/tests/setup_user
 
-.. code-block:: python 
+.. code-block:: python
 
     from django.contrib.auth.models import User
 
@@ -93,7 +94,7 @@ To test authentication, a test user needs to be created so that we can check whe
 
 Let us use the .force_authenticate method and force all requests by the test client every time it access the view. This makes the test user automatically treated as authenticated. This becomes handy while testing API and if we dont want to create a valid authentication credentials everytime we make a request. We shall use the same get() but with authentication added to it. The whole part looks as follows.
 
-.. code-block:: python 
+.. code-block:: python
 
     from rest_framework.test import APITestCase
     from rest_framework.test import APIRequestFactory, APIClient, force_authenticate
@@ -136,15 +137,15 @@ Let us test it now.
 Voilà! The test passed successfully
 
 On the way we shall test the post request in the same manner. We can use the the APIRequestFactory() with post method this time. The syntax looks like this:
-    
-.. code-block:: python 
+
+.. code-block:: python
 
     factory = APIRequestFactory()
     factory.post(uri, params)
 
 Let us try creating a new poll by sending the 'question', 'choice_strings' and 'created_by' parameters which needs the Post method. The function looks as follows.
 
-.. code-block:: python 
+.. code-block:: python
 
     def test_post_uri(self):
             params = {
@@ -170,7 +171,7 @@ Maintaining a solid rapport with the ongoing software development process always
 If the current software bulid is constantly available for testing, demo or release isn't it a developer's paradise on earth?
 Giving a cold shoulder to "Integration hell" the 'Continuous integration' process stands out to deliver all the above assets.
 
-Let us use circle CI software for our App. 
+Let us use circle CI software for our App.
 
 We can configure our application to use Circle CI  by adding a file named circle.yml which is a YAML(a human-readable data serialization format) text file. It automatically detects when a commit has been made and pushed to a GitHub repository that is using Circle CI, and each time this happens, it will try to build the project and runs tests. It also builds and once it is completed it notifies the developer in the way it is configured.
 
@@ -221,7 +222,7 @@ Example for circle.yml for python project:
       override:
         - python manage.py test
 
-From now onwards whenever we push our code to our repository a new build will be created for it and the running of the test cases will be taken place. It gives us the potential to check how good our development process is taking place with out hitting a failed test case. 
+From now onwards whenever we push our code to our repository a new build will be created for it and the running of the test cases will be taken place. It gives us the potential to check how good our development process is taking place with out hitting a failed test case.
 
 
 

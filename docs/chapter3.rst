@@ -1,5 +1,5 @@
-Chapter 3:
-===========
+Adding Authentication
+=================================
 
 In this chapter we will be dealing with the creation of URLs and authentication.
 

@@ -1,5 +1,5 @@
-Chapter 6
-==============
+Testing and using api with Postman
+==========================================
 
 In this chapter, we'll learn how to use postman for testing our APIs. Postman can be installed as Chrome extension or Chrome app. With postman you can test almost any API available provided you have access keys/secrets. For any kind of API endpoints, making a HTTP request is a first and common thing. We'll see how we can make use of Postman for this.
 

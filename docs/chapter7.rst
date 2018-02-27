@@ -1,5 +1,5 @@
-Chapter 7
-==============
+Documenting API with RAML
+============================
 
 In this chapater we will see how to use raml for all the views of our API.
 
