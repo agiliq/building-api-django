@@ -1,0 +1,16 @@
+machine:
+  python:
+    version: 2.7.6
+  environment:
+    DATABASE_URL: postgres://postgres:@127.0.0.1:5432/django_pollsapi
+
+dependencies:
+  pre:
+    - pip install --upgrade pip==1.5.6
+  override:
+    - pip install -r requirements.txt
+
+database:
+  post:
+    - psql -U ubuntu -d template1 -c 'create extension if not exists hstore;'
+    - psql -U ubuntu -d circle_test -c 'drop extension hstore; create extension if not exists hstore schema pg_catalog;'
