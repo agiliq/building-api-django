@@ -1,9 +1,9 @@
 Setup, Models and Admin
 =============================
 
-In this tutorial we will walk through a process of creating an API for a basic poll application. We will be using python 2.7, Django 1.8 and Django Rest Framework for creating API.
+In this tutorial we will walk through a process of creating an API for a basic poll application. We will be using python 3.6.x, Django 2.0.x and Django Rest Framework 3.7.7 for creating API.
 
-First things first, lets install the required modules with virtual environment created and activated.
+First things first, let's install the required modules within a virtual environment.
 
 .. code-block:: python
 
@@ -18,22 +18,30 @@ Earliest in order, to create a project we should move to the directory where we 
 
 .. code-block:: python
 
-    django-admin startproject django_pollsapi
+    django-admin startproject pollsapi
 
-The above mentioned command results us a 'django_pollsapi' directoy.
+This command gives us a 'pollsapi' directoy. The contents of this directory look like this::
+
+    manage.py
+
+    pollsapi/
+        __init__.py
+        settings.py
+        urls.py
+        wsgi.py
 
 Database setup
 ------------------
 
-For ease of use we shall choose SQlite database which is already included in python. The "django_pollsapi/settings.py" file should reflect the following Database settings
+We will use SQlite database, which is already included with Python. The :code:`pollsapi/settings.py` file woul already have the correct settings.
 
 .. code-block:: python
 
     DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-                }
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
 
 Now, use the migrate command which builds the needed database tables in regard to the "django_pollsapi/settings.py" file.
@@ -50,10 +58,18 @@ Before creating our database models, let us create our pollsapi App.
 
 .. code-block:: python
 
-    python manage.py startapp pollsapi
+    python manage.py startapp polls
 
-The above command resluts a 'pollsapi' directory containing different files, i.e 'admin.py', 'models.py', 'tests.py', 'views.py'.
-Step in to 'models.py' file and start writing the models. For creating the polls api we are going to create a Poll model, a Choice model and a Vote model. Once we are done with designing our models, the 'models.py' file should look like this:
+The above command results in a 'polls' directory containing different files::
+
+    admin.py
+    models.py
+    tests.py
+    views.py
+
+Step in to 'models.py' file and start writing the models. For creating the polls api we are going to create a :code:`Poll` model, a :code:`Choice` model and a :code:`Vote` model. Once we are done with designing our models, the 'models.py' file should look like this:
+
+These models are the same as you would have seen in the Django introduction tutorial.
 
 .. code-block:: python
 
@@ -63,7 +79,7 @@ Step in to 'models.py' file and start writing the models. For creating the polls
 
     class Poll(models.Model):
         question = models.CharField(max_length=100)
-        created_by = models.ForeignKey(User)
+        created_by = models.ForeignKey(User, on_delete=models.CASCADE)
         pub_date = models.DateTimeField(auto_now=True)
 
         def __unicode__(self):
@@ -71,7 +87,7 @@ Step in to 'models.py' file and start writing the models. For creating the polls
 
 
     class Choice(models.Model):
-        poll = models.ForeignKey(Poll, related_name='choices')
+        poll = models.ForeignKey(Poll, related_name='choices',on_delete=models.CASCADE)
         choice_text = models.CharField(max_length=100)
 
         def __unicode__(self):
@@ -79,12 +95,13 @@ Step in to 'models.py' file and start writing the models. For creating the polls
 
 
     class Vote(models.Model):
-        choice = models.ForeignKey(Choice, related_name='votes')
-        poll = models.ForeignKey(Poll)
-        voted_by = models.ForeignKey(User)
+        choice = models.ForeignKey(Choice, related_name='votes', on_delete=models.CASCADE)
+        poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+        voted_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
         class Meta:
             unique_together = ("poll", "voted_by")
+
 
 The above models have been designed in such a way that, it would make our API bulding a smooth process.
 
@@ -98,20 +115,35 @@ With the simple lines of code in the 'models.py' Django can create a database sc
     INSTALLED_APPS = (
     ...
     'rest_framework',
-    'pollsapi',
+    'polls',
     )
 
-
-Now, run the makemigrations command which will notify Django that new models have been created and those changes needs to be applied to the migration.
+Now, run the :code:`makemigrations` command which will notify Django that new models have been created and those changes needs to be applied to the migration. Run :code:`migrate` command to do the actual migration.
 
 .. code-block:: python
 
-    python manage.py makemigrations pollsapi
+    python manage.py makemigrations polls
+    python manage.py migrate
 
-Go to URls in the root folder i.e django_pollsapi and include the app urls.
+Create an empty :code:`urls.py` in your :code:`polls` app.
 
 .. code-block:: python
 
     urlpatterns = [
-    url(r'^', include('pollsapi.urls')),
     ]
+
+
+
+Go to :code:`pollsapi/urls.py` and include the polls urls.
+
+.. code-block:: python
+
+    urlpatterns = [
+        url(r'^', include('polls.urls')),
+    ]
+
+And we are in business, with a Django *Congratulations* page greeting us. (Though we haven't added any API endpoints yet.)
+
+.. image:: congrats.png
+
+We will be adding API endpoints for creating and viewing polls in the next chapter.
