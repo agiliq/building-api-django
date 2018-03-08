@@ -99,6 +99,62 @@
                     "200": {"description":"Poll created successfully"}
                 }
             }
+        },
+        "/user": {
+            "get": {
+                "tags": ["user"],
+                "summary": "Get user details",
+                "description": "",
+                "operationId": "user",
+                "consumes": ["application/json","application/xml"],
+                "produces": ["application/xml","application/json"],
+                "parameters": [{
+                    "in": "query",
+                    "name": "body",
+                    "description": "Get the user.",
+                    "required": false,
+                    "schema":{"$ref":"#/pollsapi/User"}
+                }],
+                "responses": {"200":{"description":"Successfull operation"}},
+            },
+            "post":{
+                "tags": ["user"],
+                "summary": "Create a new user",
+                "description": "Creates a new user.",
+                "operationId": "createUser",
+                "consumes":["application/json","application/xml"],
+                "produces":["application/xml","application/json"],
+                "parameters":[{
+                    "in":"query",
+                    "name":"body",
+                    "description": "User object that needs to be added.",
+                    "required": true,
+                    "schema": {"$ref":"#/pollsapi/User"}
+                }],
+                "responses": {
+                    "200": {"description":"User created successfully"}
+                }
+            }
+        },
+        "/vote": {
+            "post":{
+                "tags": ["vote"],
+                "summary": "Create a new vote",
+                "description": "Creates a new vote.",
+                "operationId": "createVote",
+                "consumes":["application/json","application/xml"],
+                "produces":["application/xml","application/json"],
+                "parameters":[{
+                    "in":"query",
+                    "name":"body",
+                    "description": "Vote object that needs to be added.",
+                    "required": true,
+                    "schema": {"$ref":"#/pollsapi/Vote"}
+                }],
+                "responses": {
+                    "200": {"description":"Vote created successfully"}
+                }
+            }
         }
     }
 }
