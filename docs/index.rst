@@ -6,7 +6,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   chapter1
+   setup-models-admin
    apis-without-drf
    chapter2
    chapter3
