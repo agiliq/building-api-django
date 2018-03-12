@@ -147,3 +147,17 @@ And we are in business, with a Django *Congratulations* page greeting us. (Thoug
 .. image:: congrats.png
 
 We will be adding API endpoints for creating and viewing polls in the next chapter.
+
+Setting up the admin
+++++++++++++++++++++++
+
+You should register :code:`Poll` and :code:`Choice` in the admin like this.
+
+.. code-block:: python
+
+    from django.contrib import admin
+
+    from .models import Poll, Choice
+
+    admin.site.register(Poll)
+    admin.site.register(Choice)

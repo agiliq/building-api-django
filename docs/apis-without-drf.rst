@@ -1,7 +1,8 @@
 A simple API with pure Django
 ========================================
 
-In this chapter, we will build an API with urse Django. We will not use Django Rest Framework (Or any other library).
+In this chapter, we will build an API with pure Django. We will not use Django Rest Framework (Or any other library).
+To start add some :code:`Poll` using the admin.
 
 The endpoints and the URLS
 +++++++++++++++++++++++++++++++
@@ -9,7 +10,7 @@ The endpoints and the URLS
 Our API will have two engpoints returning data in JSON format.
 
 * :code:`/polls/` GETs list of :code:`Poll`
-* GET :code:`/polls/{id}/` GETs data of a specific :code:`Poll`
+* GET :code:`/polls/<id>/` GETs data of a specific :code:`Poll`
 
 Connecting urls to the views
 ++++++++++++++++++++++++++++++
@@ -81,6 +82,17 @@ You can now access the API using curl, wget, postman, browser or any other API c
 
     {"results": [{"pk": 1, "question": "What is the weight of an unladen swallow?", "created_by__username": "shabda", "pub_date": "2018-03-12T10:14:19.002Z"}, {"pk": 2, "question": "What do you prefer, Flask or Django?", "created_by__username": "shabda", "pub_date": "2018-03-12T10:15:55.949Z"}, {"pk": 3, "question": "What is your favorite vacation spot?", "created_by__username": "shabda", "pub_date": "2018-03-12T10:16:11.998Z"}]}
 
-You should consider using postman or a similar tool. He is how your API looks in Postman.
+You should consider using postman or a similar tool. This is how your API looks in Postman.
 
 .. image:: postman_polls_detail.png
+
+
+Why do we need DRF?
+++++++++++++++++++++++++
+
+**(DRF = Django Rest Framework)**
+
+We were able to build the API with just Django, without using DRF, so why do we need DRF?
+Almost always, you will need common tasks with your APIs, such as access control, serailization, rate limiting and more.
+
+DRF provides a well thought out set of base components and convinient hook points for building APIs. We will be using DRF in the rest of the chapters.
