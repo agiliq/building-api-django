@@ -19,9 +19,13 @@ Lets get started with creating serializer class which will serialize and deseria
 
     from rest_framework import serializers
 
-    from django.contrib.auth.models import User
-
     from .models import Poll, Choice, Vote
+
+
+    class VoteSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Vote
+            fields = '__all__'
 
 
     class ChoiceSerializer(serializers.ModelSerializer):
@@ -29,6 +33,7 @@ Lets get started with creating serializer class which will serialize and deseria
 
         class Meta:
             model = Choice
+            fields = '__all__'
 
 
     class PollSerializer(serializers.ModelSerializer):
@@ -36,11 +41,8 @@ Lets get started with creating serializer class which will serialize and deseria
 
         class Meta:
             model = Poll
+            fields = '__all__'
 
-
-    class VoteSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = Vote
 
 
 In the above lines of code we created a Choice Serializer in such a way that whenever we create a choice it does need to have the votes model connected to it and if a poll is created the choices needs to be created simultaneously.
