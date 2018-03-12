@@ -1,7 +1,13 @@
-Building a Django polls API with DRF
+Building APIs with Django and Django Rest Framework
 ======================================================
 
-Contents:
+Building APIs with Django and DRF takes over where the Django tutorials stop.
+In the Django tutorials, you built a regular Django polls app. We will rebuild an API for a similar app.
+
+In the chapters to come, we will build a REST(ish) api with authorization, rate limiting, first with pure Django and then with DRF.
+We will cover testing, contious integration, documentation tools and API collaboration tools.
+
+Chapters:
 
 .. toctree::
    :maxdepth: 2
@@ -11,14 +17,19 @@ Contents:
    chapter2
    chapter3
    chapter4
-   chapter5
-   chapter6
+
+
+
+Appendix
+==================
+
+.. toctree::
+   :maxdepth: 2
+
+   postman
+   swagger
    Documenting-API-with-RAML
 
-
-
-Indices and tables
-==================
 
 * :ref:`genindex`
 * :ref:`modindex`
