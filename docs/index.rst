@@ -7,6 +7,7 @@ Contents:
    :maxdepth: 2
 
    chapter1
+   apis-without-drf
    chapter2
    chapter3
    chapter4

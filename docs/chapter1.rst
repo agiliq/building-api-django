@@ -1,7 +1,7 @@
 Setup, Models and Admin
 =============================
 
-In this tutorial we will walk through a process of creating an API for a basic poll application. We will be using python 3.6.x, Django 2.0.x and Django Rest Framework 3.7.7 for creating API.
+In this tutorial we will walk through a process of creating an API for a basic poll application. We will be using Python 3.6.x, Django 2.0.x and Django Rest Framework 3.7.x for creating API.
 
 First things first, let's install the required modules within a virtual environment.
 
@@ -14,7 +14,7 @@ First things first, let's install the required modules within a virtual environm
 Creating a project
 --------------------
 
-Earliest in order, to create a project we should move to the directory where we would like to store our code. For this go to command line and use cd command. Then trigger the start prject command.
+Earliest in order, to create a project we should move to the directory where we would like to store our code. For this go to command line and use cd command. Then trigger the startproject command.
 
 .. code-block:: python
 
@@ -82,7 +82,7 @@ These models are the same as you would have seen in the Django introduction tuto
         created_by = models.ForeignKey(User, on_delete=models.CASCADE)
         pub_date = models.DateTimeField(auto_now=True)
 
-        def __unicode__(self):
+        def __str__(self):
             return self.question
 
 
@@ -90,7 +90,7 @@ These models are the same as you would have seen in the Django introduction tuto
         poll = models.ForeignKey(Poll, related_name='choices',on_delete=models.CASCADE)
         choice_text = models.CharField(max_length=100)
 
-        def __unicode__(self):
+        def __str__(self):
             return self.choice_text
 
 
