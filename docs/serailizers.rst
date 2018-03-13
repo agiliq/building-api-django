@@ -1,19 +1,22 @@
-Serialiers and APIViews
+Serialiering and Deserializing Data
 ========================================
 
-Django-rest-framework makes the process of building web API's simple and flexible. With its batteries included it won't be a tedious task to create an API.
+DRF makes the process of building web API's simple and flexible. With batteries included,
+it comes with well designed base classes to allows to serialize and deserialize data.
 
 
 Serialization and Deserialization
 --------------------------------------
 
-The first part in the process of building an API is to provide a way to serialize and deserialize the instances into representations. Serialization is the process of making a streamable representation of the data which will help in the data transfer over the network. Deserialization is its reverse process. In our project of building an API we render data into JSON format. To achieve this, Django-rest-framework provides 'JSONRenderer' and 'JSONParser'. 'JSONRenderer' renders the request data into 'json' using utf-8 encoding and JSONParser parses the JSON request content.
+The first thing we need for our API is to provide a way to serialize model instances into representations. Serialization is the process of making a streamable representation of the data which we can transfer over the network. Deserialization is its reverse process.
 
 
 Creating Serializers
 -----------------------
 
-Lets get started with creating serializer class which will serialize and deserialize the pollsapi instances in to different representations. Create a file named "pollsapi/serializers.py". Let us make use of model serializers which will decrease replication of code by automatically determing the set of fields and by creating simple default implementations of the create() and update() methods.
+Lets get started with creating serializer classes which will serialize and deserialize the model instances to json representations. Create a file named :code:`polls/serializers.py`. We will use :code:`ModelSerializer` which will reduce code duplication by automatically determing the set of fields and by creating implementations of the create() and update() methods.
+
+Our :code:`polls/serializers.py` looks like this.
 
 .. code-block:: python
 
@@ -44,62 +47,69 @@ Lets get started with creating serializer class which will serialize and deseria
             fields = '__all__'
 
 
+The :code:`PollSerializer` in detail
+----------------------------------------
 
-In the above lines of code we created a Choice Serializer in such a way that whenever we create a choice it does need to have the votes model connected to it and if a poll is created the choices needs to be created simultaneously.
-
-Creating Views
-----------------
-
-Let us use generic views of Django Rest Framework for creating our views which will help us in code reusablity. The generic views alos aid us in building the API quickly and in mapping the database models.
+Our :code:`PollSerializer` looks like this.
 
 .. code-block:: python
 
-    from rest_framework import generics
+    ...
 
-    from .models import Poll, Choice
-    from .serializers import PollSerializer, ChoiceSerializer,\
-        VoteSerializer
+    class PollSerializer(serializers.ModelSerializer):
+        choices = ChoiceSerializer(many=True, read_only=True, required=False)
 
+        class Meta:
+            model = Poll
+            fields = '__all__'
 
-    class PollList(generics.ListCreateAPIView):
+What have we got with this? The :code:`PollSerializer` class has a number of methods,
 
-        """
-        List all polls, or create a new poll.
-        """
-
-        queryset = Poll.objects.all()
-        serializer_class = PollSerializer
-
-
-    class PollDetail(generics.RetrieveDestroyAPIView):
-        """
-        Create a Poll, delete a poll
-        """
-
-        queryset = Poll.objects.all()
-        serializer_class = PollSerializer
+* A :code:`is_valid(self, ..)` method which can tell if the data is sufficient and valid to create/update a model instance.
+* A :code:`save(self, ..)` method, which khows how to create or update an instance.
+* A code:`create(self, validated_data, ..)` method which knows how to create an instance. This method can be overriden to customize the create behaviour.
+* A code:`update(self, instance, validated_data, ..)` method which knows how to update an instance. This method can be overriden to customize the update behaviour.
 
 
-    class ChoiceDetail(generics.RetrieveUpdateAPIView):
-        """
-        Retrieves a Choice, Updates a Choice
-        """
+Using the :code:`PollSerializer`
+----------------------------------------
 
-        queryset = Choice.objects.all()
-        serializer_class = ChoiceSerializer
+Let's use the serializer to create a :code:`Poll` object.
+
+.. code-block:: python
+
+    In [1]: from polls.serialzers import PollSerializer
+
+    In [2]: from polls.models import Poll
+
+    In [3]: poll_serializer = PollSerializer(data={"question": "Mojito or Caipirinha?", "created_by": 1})
+
+    In [4]: poll_serializer.is_valid()
+    Out[4]: True
+
+    In [5]: poll = poll_serializer.save()
+
+    In [6]: poll.pk
+    Out[6]: 5
 
 
-    class CreateVote(generics.CreateAPIView):
-        """
-        Create a vote
-        """
+The :code:`poll.pk` line tells us that the object has been commited to the DB. You can also use the serializer to update a :code:`Poll` object.
 
-        serializer_class = VoteSerializer
+.. code-block:: python
+
+    In [9]: poll_serializer = PollSerializer(instance=poll, data={"question": "Mojito, Caipirinha or margar
+       ...: ita?", "created_by": 1})
+
+    In [10]: poll_serializer.is_valid()
+    Out[10]: True
+
+    In [11]: poll_serializer.save()
+    Out[11]: <Poll: Mojito, Caipirinha or margarita?>
+
+    In [12]: Poll.objects.get(pk=5).question
+    Out[12]: 'Mojito, Caipirinha or margarita?'
+
+We can see that calling save on a Serializer with instance causes that instance to be updated. :Code:`Poll.objects.get(pk=5).question` verifies that the Poll was updated.
 
 
-When writting a generic view we will override the view and set several calss attributes.
-
-Let us have a look in to the important parts in the code.
-
-- queryset: This will be used to return objects from the view.
-- serializer_class: This will be used for validating and deserializing the input and for seraizling the output.
+In the next chapter, we will use the serializers to write views.
