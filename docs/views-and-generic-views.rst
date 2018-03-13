@@ -1,6 +1,10 @@
 Views and Generic Views
 ============================
 
+To start with, we will use the :code:`APIView` to build the polls list and poll detail API we built in the chapter, doc:apis-without-drf:.
+
+
+
 
 Creating Views
 ----------------
