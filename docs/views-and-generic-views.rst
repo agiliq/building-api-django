@@ -161,54 +161,106 @@ Pretty nifty! This is what it looks like in Postman.
 
 .. image:: postman-options-2.png
 
+More generic views
+------------------------
+
+
+Let us add the view to create choices and for voting. We will look more closely at this code shortly.
+
 .. code-block:: python
 
     from rest_framework import generics
 
     from .models import Poll, Choice
-    from .serializers import PollSerializer, ChoiceSerializer,\
-        VoteSerializer
+    from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
 
 
     class PollList(generics.ListCreateAPIView):
-
-        """
-        List all polls, or create a new poll.
-        """
-
         queryset = Poll.objects.all()
         serializer_class = PollSerializer
 
 
     class PollDetail(generics.RetrieveDestroyAPIView):
-        """
-        Create a Poll, delete a poll
-        """
-
         queryset = Poll.objects.all()
         serializer_class = PollSerializer
 
 
-    class ChoiceDetail(generics.RetrieveUpdateAPIView):
-        """
-        Retrieves a Choice, Updates a Choice
-        """
-
+    class ChoiceList(generics.ListCreateAPIView):
         queryset = Choice.objects.all()
         serializer_class = ChoiceSerializer
 
 
     class CreateVote(generics.CreateAPIView):
-        """
-        Create a vote
-        """
-
         serializer_class = VoteSerializer
 
 
-When writting a generic view we will override the view and set several calss attributes.
+Conect the new apiviews to urls.py.
 
-Let us have a look in to the important parts in the code.
+.. code-block:: python
 
-- queryset: This will be used to return objects from the view.
-- serializer_class: This will be used for validating and deserializing the input and for seraizling the output.
+    # ...
+    urlpatterns = [
+        # ...
+        path("choices/", ChoiceList.as_view(), name="polls_list"),
+        path("vote/", CreateVote.as_view(), name="polls_list"),
+
+    ]
+
+
+
+
+There is a lot going on here, let us look at the attributes we need to override or set.
+
+- :code:`queryset`: This determines the initial queryset. The queryset can be fulter filtered, sliced or ordered by the view.
+- :code:`serializer_class`: This will be used for validating and deserializing the input and for serializing the output.
+
+We have used three different classes from :code:`rest_framework.generic`. The names of the classes are representative of what they do, but lets quickly look at them.
+
+- :code:`ListCreateAPIView`: Get a list of entities, or create them. Allows GET and POST
+- :code:`RetrieveDestroyAPIView`: Retrieve and inidvidual entity details, or delete the entity. Allows GET and DELETE
+- :code:`CreateAPIView`: Allows creating entities, but not listing them. Allows POST.
+
+Create some choices by POSTing to :code:`/choices/`.
+
+.. code-block:: json
+
+    {
+        "choice_text": "Flask",
+        "poll": 2
+    }
+
+The response looks like this
+
+.. code-block:: json
+
+    {
+        "id": 4,
+        "votes": [],
+        "choice_text": "Flask",
+        "poll": 2
+    }
+
+You can also retrieve the :code:`Poll` to by doing a :code:`GET` to :code:`/poll/<pk>/`. You should get something like this
+
+.. code-block:: json
+
+    {
+        "id": 2,
+        "choices": [
+            {
+                "id": 3,
+                "votes": [],
+                "choice_text": "Django",
+                "poll": 2
+            },
+            {
+                "id": 4,
+                "votes": [],
+                "choice_text": "Flask",
+                "poll": 2
+            }
+        ],
+        "question": "What do you prefer, Flask or Django?",
+        "pub_date": "2018-03-12T10:15:55.949721Z",
+        "created_by": 1
+    }
