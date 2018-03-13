@@ -264,3 +264,28 @@ You can also retrieve the :code:`Poll` to by doing a :code:`GET` to :code:`/poll
         "pub_date": "2018-03-12T10:15:55.949721Z",
         "created_by": 1
     }
+
+If you make a mistake while POSTing, the API will warn you. POST a json with :code:`choice_text` missing to :code:`/choices/`.
+
+.. code-block:: json
+
+    {
+        "poll": 2
+    }
+
+You will get a response like this
+
+.. code-block:: json
+
+    {
+        "poll": [
+            "This field is required."
+        ]
+    }
+
+Check the status code is 400 Bad Request.
+
+Next Steps
+--------------
+
+We have working API at this point, but we can simplify our API with a better URL design and remove some code duplication using viewsets. We will be doing that in the next chapter.
