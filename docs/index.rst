@@ -14,7 +14,8 @@ Chapters:
 
    setup-models-admin
    apis-without-drf
-   chapter2
+   serailizers
+   views-and-generic-views
    chapter3
    chapter4
 
