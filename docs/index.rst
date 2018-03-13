@@ -16,6 +16,7 @@ Chapters:
    apis-without-drf
    serailizers
    views-and-generic-views
+   more-views-and-viewsets
    access-control
    testing-and-ci
 
