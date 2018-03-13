@@ -76,7 +76,7 @@ Using the :code:`PollSerializer`
 
 Let's use the serializer to create a :code:`Poll` object.
 
-.. code-block:: python
+.. code-block:: ipython
 
     In [1]: from polls.serialzers import PollSerializer
 
@@ -93,12 +93,10 @@ Let's use the serializer to create a :code:`Poll` object.
     Out[6]: 5
 
 
-The :code:`poll.pk` line tells us that the object has been commited to the DB. You can also use the serializer to update a :code:`Poll` object.
+The :code:`poll.pk` line tells us that the object has been commited to the DB. You can also use the serializer to update a :code:`Poll` object.::
 
-.. code-block:: python
 
-    In [9]: poll_serializer = PollSerializer(instance=poll, data={"question": "Mojito, Caipirinha or margar
-       ...: ita?", "created_by": 1})
+    In [9]: poll_serializer = PollSerializer(instance=poll, data={"question": "Mojito, Caipirinha or margarita?", "created_by": 1})
 
     In [10]: poll_serializer.is_valid()
     Out[10]: True
