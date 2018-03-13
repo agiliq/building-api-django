@@ -41,12 +41,125 @@ And change your :code:`urls.py` to
         path("polls/<int:pk>/", PollDetail.as_view(), name="polls_detail")
     ]
 
+DRF comes with a browsable api, so you can directly open :code:`http://localhost:8000/polls/` in the browser. It looks like this
+
+
+.. image:: browsable-api-poll-details.png
+
+
+You can now do an :code:`options` request to `/polls/`, which gives
+
+.. code-block:: json
+
+
+    {
+        "name": "Poll List",
+        "description": "",
+        "renders": [
+            "application/json",
+            "text/html"
+        ],
+        "parses": [
+            "application/json",
+            "application/x-www-form-urlencoded",
+            "multipart/form-data"
+        ]
+    }
+
+
+This is how it looks like in postman.
+
+.. image:: postman-poll-detail-options.png
 
 Using DRF generic views to simplify code
 -----------------------------------------
 
 
-Let us use generic views of Django Rest Framework for creating our views which will help us in code reusablity. The generic views also aid us in building the API quickly and in mapping the database models.
+The :code:`PollList` and :code:`PollDetail` get the work done, but there are bunch of common operations, we can abstract away.
+
+The generic views of Django Rest Framework help us in code reusablity. They infer the response format and allowed methods from the serilizer class and base class.
+
+Change your :code:`apiviews.py` to the below code, and leave urls.py as is.
+
+.. code-block:: python
+
+    from rest_framework import generics
+
+    from .models import Poll, Choice
+    from .serializers import PollSerializer, ChoiceSerializer,\
+        VoteSerializer
+
+
+    class PollList(generics.ListCreateAPIView):
+        queryset = Poll.objects.all()
+        serializer_class = PollSerializer
+
+
+    class PollDetail(generics.RetrieveDestroyAPIView):
+        queryset = Poll.objects.all()
+        serializer_class = PollSerializer
+
+With this change, GET requests to :code:`/polls/` and :code:`/polls/<pk>/`, continue to work as was, but we have a more data available with OPTIONS.
+
+Do an OPTIONs request to :code:`/polls/`, and you will get a response like this.
+
+.. code-block:: javascript
+
+    {
+        "name": "Poll List",
+        "description": "",
+        "renders": [
+            "application/json",
+            "text/html"
+        ],
+        "parses": [
+            "application/json",
+            "application/x-www-form-urlencoded",
+            "multipart/form-data"
+        ],
+        "actions": {
+            "POST": {
+                "id": {
+                    "type": "integer",
+                    "required": false,
+                    "read_only": true,
+                    "label": "ID"
+                },
+                // ...
+                },
+                "question": {
+                    "type": "string",
+                    "required": true,
+                    "read_only": false,
+                    "label": "Question",
+                    "max_length": 100
+                },
+                "pub_date": {
+                    "type": "datetime",
+                    "required": false,
+                    "read_only": true,
+                    "label": "Pub date"
+                },
+                "created_by": {
+                    "type": "field",
+                    "required": true,
+                    "read_only": false,
+                    "label": "Created by"
+                }
+            }
+        }
+    }
+
+This tells us
+
+* Our API now accepts POST
+* The required data fields
+* The type of each data field.
+
+Pretty nifty! This is what it looks like in Postman.
+
+
+.. image:: postman-options-2.png
 
 .. code-block:: python
 
