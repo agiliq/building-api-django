@@ -145,4 +145,66 @@ And for :code:`CreateVote`,
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-We pass on poll id and choice id. We subclss this from :code:`APIView`, rather than a generic view, because we competely customize the behaviour.
+We pass on poll id and choice id. We subclss this from :code:`APIView`, rather than a generic view, because we competely customize the behaviour. This is similiar to our earlier :code:`APIView`, where in we are passing the data to a serializer, and savig or returnning an error depending on whether the serializer is valid.
+
+Introducing Viewsets and Routers
+-----------------------------------
+
+Our urls are looking good, and we have a views with very little code duplication, but we can do better.
+
+The :code:`/polls/` and :code:`/polls/<pk>/` urls require two view classes, with the same seralizer and base queryset. We can group them into a viewset, and connect the to the urls using a router.
+
+This is what it will look like:
+
+.. code-block:: python
+
+    # urls.py
+    # ...
+    from rest_framework.routers import DefaultRouter
+
+    router = DefaultRouter()
+    router.register('polls', PollViewSet, base_name='polls')
+
+
+    urlpatterns = [
+        # ...
+    ]
+
+    urlpatterns += router.urls
+
+    # views.py
+    # ...
+    from rest_framework import viewsets
+
+    from .models import Poll, Choice
+    from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
+
+
+    class PollViewSet(viewsets.ModelViewSet):
+        queryset = Poll.objects.all()
+        serializer_class = PollSerializer
+
+There is no change at all to the urls or to the responses. You can verify this by doing a GET to
+:code:`/polls/` and :code:`/polls/<pk>/`.
+
+
+Choosing the base class to use
+-----------------------------------
+
+We have seen 4 ways to build API views until now
+
+- Pure Django views
+- :code:`APIView` subclasses
+- :code:`generics.*` subclasses
+- :code:`viewsets.ModelViewSet`
+
+So which one should you use when? My rule of thumb is,
+
+- Use code:`viewsets.ModelViewSet` when you are goin to allow all or most of crud operations on a model.
+- Use :code:`generics.*` when you only want to allow some operations on a model
+- Use :code:`APIView` when you want to completely customize the behaviour.
+
+Next steps
+-----------------
+
+In the next chapter, we will look at adding access control to our apis.
