@@ -217,7 +217,7 @@ Conect the new apiviews to urls.py.
 
 There is a lot going on here, let us look at the attributes we need to override or set.
 
-- :code:`queryset`: This determines the initial queryset. The queryset can be fulter filtered, sliced or ordered by the view.
+- :code:`queryset`: This determines the initial queryset. The queryset can be further filtered, sliced or ordered by the view.
 - :code:`serializer_class`: This will be used for validating and deserializing the input and for serializing the output.
 
 We have used three different classes from :code:`rest_framework.generic`. The names of the classes are representative of what they do, but lets quickly look at them.
