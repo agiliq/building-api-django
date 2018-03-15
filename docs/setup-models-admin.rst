@@ -143,7 +143,7 @@ Go to :code:`pollsapi/urls.py` and include the polls urls.
 .. code-block:: python
 
     urlpatterns = [
-        url(r'^', include('polls.urls')),
+        re_path(r'^', include('polls.urls')),
     ]
 
 Now you can runserver ::
