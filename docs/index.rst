@@ -7,6 +7,8 @@ In the Django tutorials, you built a regular Django polls app. We will rebuild a
 In the chapters to come, we will build a REST(ish) api with authorization, rate limiting, first with pure Django and then with DRF.
 We will cover testing, contious integration, documentation tools and API collaboration tools.
 
+.. image:: cover.jpg
+
 Chapters:
 
 .. toctree::
@@ -19,7 +21,6 @@ Chapters:
    more-views-and-viewsets
    access-control
    testing-and-ci
-
 
 
 Appendix
