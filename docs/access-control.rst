@@ -15,7 +15,7 @@ We want to add these access controls.
 - Authenticated users can delete only polls they have created.
 - Only an authenticated user can vote. Users can vote for other people's polls.
 
-To enable thi access control, we need to add two more APIs
+To enable the access control, we need to add two more APIs
 
 - API to create a user, we will call this endpoint :code:`/users/`
 - API to verify a user and get a token to identify them, we will call this endpoint :code:`/login/`
@@ -103,46 +103,197 @@ Try posting the same json, and you will get a error response (HTTP status code 4
 Authentication scheme setup
 -----------------------------
 
-With Django Rest Framework we can set up a default authentication scheme which works globally with the help of setting called 'DEFAULT_AUTHENTICATION_CLASSES'. We shall use the Basic authentication scheme in this tutorial. For achieving it we should set it in our settings.py file.
+With Django Rest Framework, we can set up a default authentication scheme which is applied to all views using :code:`DEFAULT_AUTHENTICATION_CLASSES`. We will use the token authentication in this tutorial. In your settings.py, add this.
 
 .. code-block:: python
 
     REST_FRAMEWORK = {
         'DEFAULT_AUTHENTICATION_CLASSES': (
-            'rest_framework.authentication.BasicAuthentication',
+            'rest_framework.authentication.TokenAuthentication',
             'rest_framework.authentication.SessionAuthentication',
         )
     }
 
-
-If we add the above lines in our settings.py file, we do require basic authentication to access the views. But, we do need the access to create a user. So we shall override the global setting in a single view level. Move to the app's view.py file and add the below line to the 'UserCreate' view.
+You also need to enable :code:`rest_framework.authtoken` app, the so update :code:`INSTALLED_APPS` in your settings.py.
 
 .. code-block:: python
 
-    authentication_classes = ()
+    INSTALLED_APPS = (
+        ...
+        'rest_framework.authtoken'
+    )
 
+Run :code:`python manage.py migrate` to create the new tables.
 
-Now we should make sure that the bullet points we mentioned in the beginning of authentication needs to be achieved. Whether to create or access a poll the user needs to be a registered one. For that we can add the default permission policy globally using the DEFAULT_PERMISSION_CLASSES setting. Add the below setting to the settings.py file.
+.. We want to ensure that, by default all apis are only allowed to authenticated users. Add this to your :code:`settings.py`.
 
 .. code-block:: python
 
     REST_FRAMEWORK = {
+        # ...
         'DEFAULT_PERMISSION_CLASSES': (
             'rest_framework.permissions.IsAuthenticated',
         )
     }
 
-Also, dont forget to give excemption to UserCreate view by overriding the global setting. Just to make sure the UserCreate should look as follows.
+Also, dont forget to give excemption to :code:`UserCreate` view fro authentication by overriding the global setting. The :code:`UserCreate` should look as follows.
 
 .. code-block:: python
 
     class UserCreate(generics.CreateAPIView):
-        """
-        Create an User
-        """
-
         authentication_classes = ()
         permission_classes = ()
         serializer_class = UserSerializer
 
-All done, so from now the user needs to be an 'authenticated user' to access our poll and the poll data.
+Note the :code:`authentication_classes = ()` and :code:`permission_classes = ()` to excempt :code:`UserCreate` from global authentication scheme.
+
+We want to ensure that tokens are created when user is created in :code:`UserCreate` view, so we update the :code:`UserSerializer`. Change your :code:`serailizers.py` like this
+
+.. code-block:: python
+
+    from rest_framework.authtoken.models import Token
+
+    class UserSerializer(serializers.ModelSerializer):
+
+            class Meta:
+                model = User
+                fields = ('username', 'email', 'password')
+                extra_kwargs = {'password': {'write_only': True}}
+
+            def create(self, validated_data):
+                user = User(
+                    email=validated_data['email'],
+                    username=validated_data['username']
+                )
+                user.set_password(validated_data['password'])
+                user.save()
+                Token.objects.create(user=user)
+                return user
+
+
+
+The login API
+-----------------------------
+
+Since we have added :code:`rest_framework.authentication.TokenAuthentication`, we will need to set an header like this :code:`Authorization: Token c2a84953f47288ac1943a3f389a6034e395ad940` to auhenticate. We need an API where a user can give their username and password, and get a token back.
+
+We will not be adding a serailizer, because we never save a token using this API.
+
+Add a view and connect it to urls.
+
+.. code-block:: python
+
+    # in apiviews.py
+    # ...
+
+    class LoginView(APIView):
+        def post(self, request,):
+            username = request.data.get("username")
+            password = request.data.get("password")
+            user = authenticate(username=username, password=password)
+            if user:
+                return Response({"token": user.auth_token.key})
+            else:
+                return Response({"error": "Wrong Credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+    # in urls.py
+    # ...
+
+    from .apiviews import PollViewSet, ChoiceList, CreateVote, UserCreate, LoginView
+
+
+
+    urlpatterns = [
+        path("login/", LoginView.as_view(), name="login"),
+        # ...
+    ]
+
+Do you a POST with a correct username and password, and you will get a response like this.
+
+.. code-block:: json
+
+    {
+        "token": "c300998d0e2d1b8b4ed9215589df4497de12000c"
+    }
+
+
+POST with a incorrect username and password, and you will get a response like this, with a HTTP status of 400.
+
+.. code-block:: json
+
+    {
+        "error": "Wrong Credentials"
+    }
+
+
+Fine grained access control
+-----------------------------
+
+Try accessing the :code:`/polls/` API without any header. You will get an error with a http status code of :code:`HTTP 401 Unauthorized` like this.
+
+.. code-block:: json
+
+    {
+        "detail": "Authentication credentials were not provided."
+    }
+
+Add an authorization header :code:`Authorization: Token <your token>`, and you can access the API.
+
+From now onwards we will use a HTTP header like this, :code:`Authorization: Token <your token>` in all further requests.
+
+We have two remaining things we need to enforce.
+
+- Authenticated users can create choices only for polls they have created.
+- Authenticated users can delete only polls they have created.
+
+We will do that by overriding :code:`PollViewSet.destroy` and :code:`ChoiceList.post`.
+
+.. code-block:: python
+
+
+    class PollViewSet(viewsets.ModelViewSet):
+        # ...
+
+        def destroy(self, request, *args, **kwargs):
+            poll = Poll.objects.get(pk=self.kwargs["pk"])
+            if not request.user == poll.created_by:
+                raise PermissionDenied("You can not delete this poll.")
+            return super().destroy(request, *args, **kwargs)
+
+
+    class ChoiceList(generics.ListCreateAPIView):
+        # ...
+
+        def post(self, request, *args, **kwargs):
+            poll = Poll.objects.get(pk=self.kwargs["pk"])
+            if not request.user == poll.created_by:
+                raise PermissionDenied("You can not create choice for this poll.")
+            return super().post(request, *args, **kwargs)
+
+In both cases, we are checkeding the :code:`request.user` against the expected user, and raising
+as :code:`PermissionDenied` if it does not match.
+
+You can check this by doing a DELETE on someone elses :code:`Poll`. You will get an error with :code:`HTTP 403 Forbidden` and response.
+
+
+.. code-block:: json
+
+    {
+        "detail": "You can not delete this poll."
+    }
+
+
+Similarly trying to create choice for someone else's :code:`Poll` will get an error with :code:`HTTP 403 Forbidden` and response
+
+.. code-block:: json
+
+    {
+        "detail": "You can not create choice for this poll."
+    }
+
+
+Next steps:
+-----------------
+
+In the next chapter we will look at adding tests for our API and serailizers. We will also look at how to use :code:`flake8` and run our tests in a CI environment.
