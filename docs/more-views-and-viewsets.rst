@@ -59,8 +59,8 @@ And change your urls.py to a nested structure.
 
     #...
     urlpatterns = [
-        path("polls/<int:pk>/choices/", ChoiceList.as_view(), name="polls_list"),
-        path("polls/<int:pk>/choices/<int:choice_pk>/vote/", CreateVote.as_view(), name="polls_list"),
+        path("polls/<int:pk>/choices/", ChoiceList.as_view(), name="choice_list"),
+        path("polls/<int:pk>/choices/<int:choice_pk>/vote/", CreateVote.as_view(), name="create_vote"),
 
     ]
 
@@ -104,7 +104,7 @@ Lets get back to :code:`ChoiceList`.
     #...
     urlpatterns = [
         # ...
-        path("polls/<int:pk>/choices/", ChoiceList.as_view(), name="polls_list"),
+        path("polls/<int:pk>/choices/", ChoiceList.as_view(), name="choice_list"),
     ]
 
     # views.py
@@ -145,14 +145,14 @@ And for :code:`CreateVote`,
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-We pass on poll id and choice id. We subclss this from :code:`APIView`, rather than a generic view, because we competely customize the behaviour. This is similiar to our earlier :code:`APIView`, where in we are passing the data to a serializer, and savig or returnning an error depending on whether the serializer is valid.
+We pass on poll id and choice id. We subclass this from :code:`APIView`, rather than a generic view, because we competely customize the behaviour. This is similiar to our earlier :code:`APIView`, where in we are passing the data to a serializer, and saving or returnning an error depending on whether the serializer is valid.
 
 Introducing Viewsets and Routers
 -----------------------------------
 
 Our urls are looking good, and we have a views with very little code duplication, but we can do better.
 
-The :code:`/polls/` and :code:`/polls/<pk>/` urls require two view classes, with the same seralizer and base queryset. We can group them into a viewset, and connect the to the urls using a router.
+The :code:`/polls/` and :code:`/polls/<pk>/` urls require two view classes, with the same serializer and base queryset. We can group them into a viewset, and connect them to the urls using a router.
 
 This is what it will look like:
 
@@ -200,7 +200,7 @@ We have seen 4 ways to build API views until now
 
 So which one should you use when? My rule of thumb is,
 
-- Use code:`viewsets.ModelViewSet` when you are goin to allow all or most of crud operations on a model.
+- Use :code:`viewsets.ModelViewSet` when you are goin to allow all or most of crud operations on a model.
 - Use :code:`generics.*` when you only want to allow some operations on a model
 - Use :code:`APIView` when you want to completely customize the behaviour.
 
