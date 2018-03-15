@@ -7,18 +7,24 @@ Creating Views with :code:`APIView`
 -----------------------------------------
 
 
-To start with, we will use the :code:`APIView` to build the polls list and poll detail API we built in the chapter, doc:apis-without-drf:.
+To start with, we will use the :code:`APIView` to build the polls list and poll detail API we built in the chapter, :doc:`apis-without-drf`.
 
 Add this to a new file :code:`polls/apiviews.py`
 
 .. code-block:: python
+
+    from rest_framework.views import APIView
+    from rest_framework.response import Response
+    from django.shortcuts import get_object_or_404
+
+    from .models import Poll, Choice
+    from  .serializers import PollSerializer
 
     class PollList(APIView):
         def get(self, request):
             polls = Poll.objects.all()[:20]
             data = PollSerializer(polls, many=True).data
             return Response(data)
-
 
 
     class PollDetail(APIView):
@@ -75,7 +81,7 @@ Using DRF generic views to simplify code
 -----------------------------------------
 
 
-The :code:`PollList` and :code:`PollDetail` get the work done, but there are bunch of common operations, we can abstract away.
+The :code:`PollList` and :code:`PollDetail` get the work done, but there are bunch of common operations, we can do it in abstract away.
 
 The generic views of Django Rest Framework help us in code reusablity. They infer the response format and allowed methods from the serilizer class and base class.
 
