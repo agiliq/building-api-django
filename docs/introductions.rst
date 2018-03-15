@@ -12,6 +12,6 @@ If you have finished the Django "Polls" tuorial, and want to learn using DRF to 
 How to read this book?
 -------------------------
 
-The chjapters are meant to be read in order. If you have existing knowledge of some chapters, you can quickly go throough that chapter, but I highly recommend reading them in order as each chapter builds on the previous.
+The chapters are meant to be read in order. If you have existing knowledge of some chapters, you can quickly go throough that chapter, but I highly recommend reading them in order as each chapter builds on the previous.
 
 
