@@ -1,45 +1,32 @@
-Adding Authentication
+Access Control
 =================================
 
-In this chapter we will be dealing with the creation of URLs and authentication.
+In this chapter, we will add access control to our APIs,
+and add APIs to create and authenticate users.
 
-Creating URLs
---------------
+Right now our APIs are completely permissive. Anyone can create, access and delete anything.
+We want to add these access controls.
 
-It's time to wire up the views to their respective specific URLs. We shall do it in the following manner.
 
-.. code-block:: python
+- A user must be authenticated to access a poll or the list of polls.
+- Only an authenicated users can create a poll.
+- Only an authenticated user can create a choice.
+- Authenticated users can create choices only for polls they have created.
+- Authenticated users can delete only polls they have created.
+- Only an authenticated user can vote. Users can vote for other people's polls.
 
-    from django.conf.urls import include, url
-    from django.contrib import admin
+To enable thi access control, we need to add two more APIs
 
-    import pollsapi.views
+- API to create a user, we will call this endpoint :code:`/users/`
+- API to verify a user and get a token to identify them, we will call this endpoint :code:`/login/`
 
-    urlpatterns = [
 
-        url(r'^admin/', include(admin.site.urls)),
-        url(r'^polls/$', pollsapi.views.PollList.as_view()),
-        url(r'polls/(?P<pk>[0-9]+)/$', pollsapi.views.PollDetail.as_view()),
-        url(r'^create_user/$', pollsapi.views.UserCreate.as_view()),
-        url(r'^choices/(?P<pk>[0-9]+)/$', pollsapi.views.ChoiceDetail.as_view()),
-        url(r'^create_vote/$', pollsapi.views.CreateVote.as_view()),
-    ]
 
-In the above lines of code we have created URLs for all the views according to our requirement.
-
-Authentication of the API
+Creating a user
 --------------------------
 
-Right now any one can create a poll or vote for a choice, and our endpoints are openly accessable to the world. Let us restrict the access by adding the authenitcation.
-The following are the on we are going to deal with:
 
-- A user has to login to access a poll.
-- Only an authenicated users can create a poll.
-- Only an authenticated user can vote.
-- Only an authenticated user can create a choice.
-
-
-Initially we should need representaions for User and for that let us create one in the serializers.py. Add the following code snippet to our serializers file.
+We will add an user serializer, which will allow creating. Add the following code to :code:`serializers.py`.
 
 .. code-block:: python
 
@@ -59,33 +46,59 @@ Initially we should need representaions for User and for that let us create one 
             user.save()
             return user
 
-In the above lines of code we used the ModelSerializer method's 'create()' to save the 'User' instances.
+We have overriden the ModelSerializer method's :code:`create()` to save the :code:`User` instances. We ensure that we set the password correctly using :code:`user.set_password`, rather than setting the raw password as the hash. We also don't want to get back the password in response which we ensure using :code:`extra_kwargs = {'password': {'write_only': True}}`.
 
-Let us also add views to the User Serializer for creating and retrieving the user.
+Let us also add views to the User Serializer for creating the user and connect it to the urls.py
 
 .. code-block:: python
 
+    # in apiviews.py
+    # ...
+    from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer, UserSerializer
+
+    # ...
     class UserCreate(generics.CreateAPIView):
-        """
-        Create an User
-        """
-
         serializer_class = UserSerializer
 
+    # in urls.py
+    # ...
+    from .apiviews import PollViewSet, ChoiceList, CreateVote, UserCreate
 
-    class UserDetail(generics.RetrieveAPIView):
-        """
-        Retrieve a User
-        """
 
-        queryset = User.objects.all()
-        serializer_class = UserSerializer
+    urlpatterns = [
+        # ...
+        path("users/", UserCreate.as_view(), name="user_create"),
+    ]
 
-Let us create a URL for accessing the detail info about the user. For that access the urls.py file and wire up the following User URL.
+We can test this api by posting to :code:`/users/` with this json.
 
-.. code-block:: python
+.. code-block:: json
 
-    url(r'^users/(?P<pk>[0-9]+)/$', pollsapi.views.UserDetail.as_view()),
+    {
+        "username": "nate.silver",
+        "email": "nate.silver@example.com",
+        "password": "FiveThirtyEight"
+    }
+
+Which give back this response.
+
+.. code-block:: json
+
+    {
+        "username": "nate.silver",
+        "email": "nate.silver@example.com"
+    }
+
+Try posting the same json, and you will get a error response (HTTP status code 400)
+
+.. code-block:: json
+
+    {
+        "username": [
+            "A user with that username already exists."
+        ]
+    }
+
 
 Authentication scheme setup
 -----------------------------
@@ -133,55 +146,3 @@ Also, dont forget to give excemption to UserCreate view by overriding the global
         serializer_class = UserSerializer
 
 All done, so from now the user needs to be an 'authenticated user' to access our poll and the poll data.
-
-Exceptional handling
----------------------
-
-Now, let us deal with exception handling which will make our code to work perfect at all situations. Take an instance of a user trying to select a choice that is not availble in choice list and our application should not get freezed or turn buggy. At this point we can make use of 'ValidationError' class which can be used for serializer and field validations.
-
-The model Serializer class in Django Rest Framework has the default implementations of '.create()' and '.update()'. We can make use fo the '.create()' here. Let us do it right away in the pollsapi/serializers.py.
-
-.. code-block:: python
-
-    class VoteSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = Vote
-            validators=[
-                UniqueTogetherValidator(
-                    queryset=Vote.objects.all(),
-                    fields=('poll', 'voted_by'),
-                    message="User already voted for this poll"
-                )
-            ]
-
-        def create(self, validated_data):
-            poll = validated_data["poll"]
-            choice = validated_data["choice"]
-            if not choice in poll.choices.all():
-                raise serializers.ValidationError('Choice must be valid.')
-            vote = super(VoteSerializer, self).create(validated_data)
-            return vote
-
-In the above lines of code in the 'create()' we were checking whether the selected choice is a valid one or not. And if turns to be false a validation error will be raised.
-
-We have got another place where we need to handle an exception. If the user forgot to create the choices while starting a new poll an exception needs to be raised that the choices needs to be created as well. For that, make the below changes in the PollSerializer method in the pollsapi/serializers.py
-
-.. code-block:: python
-
-    class PollSerializer(serializers.ModelSerializer):
-        choices = ChoiceSerializer(many=True, read_only=True, required=False)
-
-        class Meta:
-            model = Poll
-
-        def create(self, validated_data):
-            choice_strings = self.context.get("request").data.get("choice_strings")
-            if not choice_strings:
-                raise serializers.ValidationError('choice_strings needed.')
-            poll = super(PollSerializer, self).create(validated_data)
-            for choice in choice_strings:
-                Choice.objects.create(poll=poll, choice_text=choice)
-            return poll
-
-So the above fixes makes sure that no bugs comes to light and turns the code to run smooth.
-
