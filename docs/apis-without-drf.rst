@@ -7,10 +7,10 @@ To start add some :code:`Poll` using the admin.
 The endpoints and the URLS
 +++++++++++++++++++++++++++++++
 
-Our API will have two engpoints returning data in JSON format.
+Our API will have two endpoints returning data in JSON format.
 
 * :code:`/polls/` GETs list of :code:`Poll`
-* GET :code:`/polls/<id>/` GETs data of a specific :code:`Poll`
+* :code:`/polls/<id>/` GETs data of a specific :code:`Poll`
 
 Connecting urls to the views
 ++++++++++++++++++++++++++++++
@@ -28,7 +28,7 @@ Write two place holder view functions and connect them in your :code:`urls.py`. 
 
 
     # in urls.py
-    ...
+    from django.urls import path
     from .views import polls_list, polls_detail
 
     urlpatterns = [
@@ -66,7 +66,7 @@ We will now write the :code:`polls_list` and :code:`polls_detail`
         return JsonResponse(data)
 
 This should be standard Django for you. :code:`polls = Poll.objects.all()[:20]` gets us upto 20 :code:`Poll` objects.
-We get a list of dictionaries using `{"results": list(polls.values("question", "created_by__username", "pub_date"))}` and return it with a :code:`JsonResponse`. A :code:`JsonResponse` is a like :code:`HttpResponse` with :code:`content-type=application/json`.
+We get a list of dictionaries using :code:`{"results": list(polls.values("question", "created_by__username", "pub_date"))}` and return it with a :code:`JsonResponse`. A :code:`JsonResponse` is a like :code:`HttpResponse` with :code:`content-type=application/json`.
 
 Similarly, `polls_detail` gets a specific Poll using :code:`get_object_or_404(Poll, pk=pk)`, and returns it wrapped in :code:`JsonResponse`.
 
@@ -95,4 +95,4 @@ Why do we need DRF?
 We were able to build the API with just Django, without using DRF, so why do we need DRF?
 Almost always, you will need common tasks with your APIs, such as access control, serailization, rate limiting and more.
 
-DRF provides a well thought out set of base components and convinient hook points for building APIs. We will be using DRF in the rest of the chapters.
+DRF provides a well thought out set of base components and convenient hook points for building APIs. We will be using DRF in the rest of the chapters.
