@@ -14,6 +14,7 @@ Chapters:
 .. toctree::
    :maxdepth: 2
 
+   introduction
    setup-models-admin
    apis-without-drf
    serailizers
