@@ -14,7 +14,7 @@ The first thing we need for our API is to provide a way to serialize model insta
 Creating Serializers
 -----------------------
 
-Lets get started with creating serializer classes which will serialize and deserialize the model instances to json representations. Create a file named :code:`polls/serializers.py`. We will use :code:`ModelSerializer` which will reduce code duplication by automatically determing the set of fields and by creating implementations of the create() and update() methods.
+Lets get started with creating serializer classes which will serialize and deserialize the model instances to json representations. Create a file named :code:`polls/serializers.py`. We will use :code:`ModelSerializer` which will reduce code duplication by automatically determing the set of fields and by creating implementations of the :code:`create()` and :code:`update()` methods.
 
 Our :code:`polls/serializers.py` looks like this.
 
@@ -67,8 +67,8 @@ What have we got with this? The :code:`PollSerializer` class has a number of met
 
 * A :code:`is_valid(self, ..)` method which can tell if the data is sufficient and valid to create/update a model instance.
 * A :code:`save(self, ..)` method, which khows how to create or update an instance.
-* A code:`create(self, validated_data, ..)` method which knows how to create an instance. This method can be overriden to customize the create behaviour.
-* A code:`update(self, instance, validated_data, ..)` method which knows how to update an instance. This method can be overriden to customize the update behaviour.
+* A :code:`create(self, validated_data, ..)` method which knows how to create an instance. This method can be overriden to customize the create behaviour.
+* A :code:`update(self, instance, validated_data, ..)` method which knows how to update an instance. This method can be overriden to customize the update behaviour.
 
 
 Using the :code:`PollSerializer`
@@ -78,7 +78,7 @@ Let's use the serializer to create a :code:`Poll` object.
 
 .. code-block:: ipython
 
-    In [1]: from polls.serialzers import PollSerializer
+    In [1]: from polls.serializers import PollSerializer
 
     In [2]: from polls.models import Poll
 
@@ -93,7 +93,7 @@ Let's use the serializer to create a :code:`Poll` object.
     Out[6]: 5
 
 
-The :code:`poll.pk` line tells us that the object has been commited to the DB. You can also use the serializer to update a :code:`Poll` object.::
+The :code:`poll.pk` line tells us that the object has been commited to the DB. You can also use the serializer to update a :code:`Poll` object. ::
 
 
     In [9]: poll_serializer = PollSerializer(instance=poll, data={"question": "Mojito, Caipirinha or margarita?", "created_by": 1})
