@@ -7,18 +7,24 @@ Creating Views with :code:`APIView`
 -----------------------------------------
 
 
-To start with, we will use the :code:`APIView` to build the polls list and poll detail API we built in the chapter, doc:apis-without-drf:.
+To start with, we will use the :code:`APIView` to build the polls list and poll detail API we built in the chapter, :doc:`apis-without-drf`.
 
 Add this to a new file :code:`polls/apiviews.py`
 
 .. code-block:: python
+
+    from rest_framework.views import APIView
+    from rest_framework.response import Response
+    from django.shortcuts import get_object_or_404
+
+    from .models import Poll, Choice
+    from  .serializers import PollSerializer
 
     class PollList(APIView):
         def get(self, request):
             polls = Poll.objects.all()[:20]
             data = PollSerializer(polls, many=True).data
             return Response(data)
-
 
 
     class PollDetail(APIView):
@@ -75,7 +81,7 @@ Using DRF generic views to simplify code
 -----------------------------------------
 
 
-The :code:`PollList` and :code:`PollDetail` get the work done, but there are bunch of common operations, we can abstract away.
+The :code:`PollList` and :code:`PollDetail` get the work done, but there are bunch of common operations, we can do it in abstract away.
 
 The generic views of Django Rest Framework help us in code reusablity. They infer the response format and allowed methods from the serilizer class and base class.
 
@@ -211,7 +217,7 @@ Conect the new apiviews to urls.py.
 
 There is a lot going on here, let us look at the attributes we need to override or set.
 
-- :code:`queryset`: This determines the initial queryset. The queryset can be fulter filtered, sliced or ordered by the view.
+- :code:`queryset`: This determines the initial queryset. The queryset can be further filtered, sliced or ordered by the view.
 - :code:`serializer_class`: This will be used for validating and deserializing the input and for serializing the output.
 
 We have used three different classes from :code:`rest_framework.generic`. The names of the classes are representative of what they do, but lets quickly look at them.

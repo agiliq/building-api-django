@@ -44,7 +44,7 @@ We will use SQlite database, which is already included with Python. The :code:`p
         }
     }
 
-Now, use the migrate command which builds the needed database tables in regard to the "django_pollsapi/settings.py" file.
+Now, use the migrate command which builds the needed database tables in regard to the :code:`django_pollsapi/settings.py` file.
 
 .. code-block:: python
 
@@ -63,11 +63,12 @@ Before creating our database models, let us create our pollsapi App.
 The above command results in a 'polls' directory containing different files::
 
     admin.py
+    apps.py
     models.py
     tests.py
     views.py
 
-Step in to 'models.py' file and start writing the models. For creating the polls api we are going to create a :code:`Poll` model, a :code:`Choice` model and a :code:`Vote` model. Once we are done with designing our models, the 'models.py' file should look like this:
+Step in to 'models.py' file and start writing the models. For creating the polls api we are going to create a :code:`Poll` model, a :code:`Choice` model and a :code:`Vote` model. Once we are done with designing our models, the :code:'models.py' file should look like this:
 
 These models are the same as you would have seen in the Django introduction tutorial.
 
@@ -122,8 +123,11 @@ Now, run the :code:`makemigrations` command which will notify Django that new mo
 
 .. code-block:: python
 
-    python manage.py makemigrations polls
-    python manage.py migrate
+    $ python manage.py makemigrations polls
+
+    $ python manage.py migrate
+
+
 
 Create an empty :code:`urls.py` in your :code:`polls` app.
 
@@ -139,8 +143,15 @@ Go to :code:`pollsapi/urls.py` and include the polls urls.
 .. code-block:: python
 
     urlpatterns = [
-        url(r'^', include('polls.urls')),
+        re_path(r'^', include('polls.urls')),
     ]
+
+Now you can runserver ::
+
+    $ python manage.py runserver
+
+
+Goto any browser of your choice and hit the url :code:`http://127.0.0.1:8000`
 
 And we are in business, with a Django *Congratulations* page greeting us. (Though we haven't added any API endpoints yet.)
 
