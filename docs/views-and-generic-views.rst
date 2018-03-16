@@ -207,8 +207,8 @@ Conect the new apiviews to urls.py.
     # ...
     urlpatterns = [
         # ...
-        path("choices/", ChoiceList.as_view(), name="polls_list"),
-        path("vote/", CreateVote.as_view(), name="polls_list"),
+        path("choices/", ChoiceList.as_view(), name="choice_list"),
+        path("vote/", CreateVote.as_view(), name="create_vote"),
 
     ]
 

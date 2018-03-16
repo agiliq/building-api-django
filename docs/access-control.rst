@@ -136,7 +136,7 @@ Run :code:`python manage.py migrate` to create the new tables.
         )
     }
 
-Also, dont forget to give excemption to :code:`UserCreate` view fro authentication by overriding the global setting. The :code:`UserCreate` should look as follows.
+Also, dont forget to give exemption to :code:`UserCreate` view for authentication by overriding the global setting. The :code:`UserCreate` in :code:`polls/apiviews.py` should look as follows.
 
 .. code-block:: python
 
@@ -177,7 +177,7 @@ The login API
 
 Since we have added :code:`rest_framework.authentication.TokenAuthentication`, we will need to set an header like this :code:`Authorization: Token c2a84953f47288ac1943a3f389a6034e395ad940` to auhenticate. We need an API where a user can give their username and password, and get a token back.
 
-We will not be adding a serailizer, because we never save a token using this API.
+We will not be adding a serializer, because we never save a token using this API.
 
 Add a view and connect it to urls.
 
@@ -209,7 +209,7 @@ Add a view and connect it to urls.
         # ...
     ]
 
-Do you a POST with a correct username and password, and you will get a response like this.
+Do a POST with a correct username and password, and you will get a response like this.
 
 .. code-block:: json
 
