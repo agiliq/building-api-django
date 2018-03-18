@@ -1,7 +1,7 @@
 Introductions
 =================
 
-*Building APIs with Django and Django Rest Framework* starts where the Django "Polls" tutorial stops, and takes you through building the polls app, but this time using APIs. You will learn the basics of Django Rest Framework including serialisation, views, generic views, viewsets, testing, access control. You will also learn about API documentation using swagger and raml.
+*Building APIs with Django and Django Rest Framework* starts where the `Django "Polls" tutorial <https://docs.djangoproject.com/en/2.0/intro/tutorial01/>`_ stops, and takes you through building the polls app, but this time using APIs. You will learn the basics of Django Rest Framework including serialisation, views, generic views, viewsets, testing, access control. You will also learn about API documentation using swagger and raml.
 
 Who is this book for?
 -------------------------
