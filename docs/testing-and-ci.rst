@@ -132,75 +132,127 @@ You should get this response
     OK
     Destroying test database for alias 'default'...
 
-Let us use the .force_authenticate method and force all requests by the test client every time it access the view. This makes the test user automatically treated as authenticated. This becomes handy while testing API and if we dont want to create a valid authentication credentials everytime we make a request. We shall use the same get() but with authentication added to it. The whole part looks as follows.
+Using :code:`APIClient`
+--------------------------
+
+The same test can be written using :code:`APIClient`. It has :code:`get`, :code:`.post` and family. Unlike creating requests first, with :code:`APIClient` you can GET ot POST to a url directly and get a response.
+
+Add a test like this:
 
 .. code-block:: python
 
-    from rest_framework.test import APITestCase
-    from rest_framework.test import APIRequestFactory, APIClient, force_authenticate
-    from pollsapi.tests.user_setup import setup_user
+    from rest_framework.test import APIClient
 
-    from pollsapi import views
+    # ...
 
 
     class TestPoll(APITestCase):
         def setUp(self):
-            self.factory = APIRequestFactory()
             self.client = APIClient()
-            self.user = setup_user()
-            self.view = views.PollList.as_view()
-            self.uri = '/polls/'
+            # ...
 
-        def test_get(self):
-            request = self.factory.get(self.uri)
-            force_authenticate(request, self.user)
-            response = self.view(request)
+        # ...
+        def test_list2(self):
+            response = self.client.get(self.uri)
             self.assertEqual(response.status_code, 200,
                              'Expected Response Code 200, received {0} instead.'
                              .format(response.status_code))
 
 Let us test it now.
 
-.. code-block:: python
+.. code-block:: bash
 
-    python manage.py test
+    python manage.py test polls.tests.TestPoll
 
 
     Creating test database for alias 'default'...
-    .....
+    System check identified no issues (0 silenced).
+    F
+    ======================================================================
+    FAIL: test_list2 (polls.tests.TestPoll)
     ----------------------------------------------------------------------
-    Ran 1 tests in 0.001s
+    Traceback (most recent call last):
+      File "/Users/shabda/repos/building-api-django/pollsapi/polls/tests.py", line 37, in test_list2
+        .format(response.status_code))
+    AssertionError: 401 != 200 : Expected Response Code 200, received 401 instead.
+
+    ----------------------------------------------------------------------
+    Ran 1 test in 0.136s
+
+    FAILED (failures=1)
+    Destroying test database for alias 'default'...
+
+We are seeing the same failure we saw in the test with :code:`APIRequestFactory`. You can login a :code:`APIClient` by calling
+:code:`APIClient.login`. Lets update the test.
+
+.. code-block:: python
+
+    class TestPoll(APITestCase):
+        # ...
+
+        def test_list2(self):
+            self.client.login(username="test", password="test")
+            response = self.client.get(self.uri)
+            self.assertEqual(response.status_code, 200,
+                             'Expected Response Code 200, received {0} instead.'
+                             .format(response.status_code))
+
+.. code-block:: bash
+
+    python manage.py test polls.tests.TestPoll
+    Creating test database for alias 'default'...
+    System check identified no issues (0 silenced).
+    .
+    ----------------------------------------------------------------------
+    Ran 1 test in 0.260s
 
     OK
     Destroying test database for alias 'default'...
 
-Voilà! The test passed successfully
+Voilà! The test passed successfully.
 
-On the way we shall test the post request in the same manner. We can use the the APIRequestFactory() with post method this time. The syntax looks like this:
+:code:`.post` and create
+--------------------------------------------------
 
-.. code-block:: python
+We now know how to test our GET APIs. We can use the the :code:`APIClient` with :code:`.post` method this time.
 
-    factory = APIRequestFactory()
-    factory.post(uri, params)
-
-Let us try creating a new poll by sending the 'question', 'choice_strings' and 'created_by' parameters which needs the Post method. The function looks as follows.
+Let us try creating a new poll by sending the 'question', and 'created_by' parameters which are needs in the POST method. The test function looks as follows.
 
 .. code-block:: python
 
-    def test_post_uri(self):
+
+    class TestPoll(APITestCase):
+
+        # ...
+        def test_create(self):
+            self.client.login(username="test", password="test")
             params = {
-                "question": "How are you man?",
-                "choice_strings": ["Yo Man", "Not Fine"],
+                "question": "How are you?",
                 "created_by": 1
                 }
-            request = self.factory.post(self.uri, params)
-            force_authenticate(request, user=self.user)
-            response = self.view(request)
+            response = self.client.post(self.uri, params)
             self.assertEqual(response.status_code, 201,
                              'Expected Response Code 201, received {0} instead.'
                              .format(response.status_code))
 
-And the above function should result us the http code 201 if the test passes succesfully. And we are all done with the stuff. Time to celebrate with the API :)
+
+We are asserting that the the http code is 201 if the test passes succesfully. Lets run the tests.
+
+.. code-block:: bash
+
+python manage.py test polls.tests.TestPoll.test_create
+
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.267s
+
+OK
+Destroying test database for alias 'default'...
+
+
+Time to celebrate with the API :)
 
 
 Continuous integration with CircleCI
