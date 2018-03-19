@@ -2,15 +2,19 @@ Testing and Continuous Integeration
 ==========================================
 
 
-In this chapater we will test all the views of our API.
+In this chapater we will add test to our API.
 
-Unit testing is always worth the effort. It will gives us the confidence that the code is working perfect at all stages. It also helps us to identify the bugs in beforehand which will make the development process a cakewalk. Perhaps, test cases stands as documentation to the whole part of the code.
+DRF provides a few important classes which makes testing APIs simpler. We will be using these classes later in the chapter in our tests.
+
+- :code:`APIRequestFactory`: This is similar to Django's :code:`RequestFactory`. It allows you to create requests with any http method, which you can then pass on to any view method and compare responses.
+- :code:`APIClient`: similar to Django's :code:`Client`. You can GET or POST a URL, and test responses.
+- :code:`APITestCase`: similar to Django's :code:`TestCase`. Most of your tests will subclass this.
 
 Now lets us write test cases to our polls application.
 
 Creating Test Requests
 ------------------------
-We know that Django's 'Requestfactory' has the capability to create request instances which aid us in testing view functions induvidually. Django Rest Framework has a class called 'APIRequestFactory' which extends the standard Django's  'Requestfactory'. This class contains almost all the http verbs like .get(), .post(), .put(), .patch() etc., in it.
+Django's 'Requestfactory' has the capability to create request instances which allow us in testing view functions induvidually. Django Rest Framework has a class called 'APIRequestFactory' which extends the standard Django's  'Requestfactory'. This class contains almost all the http verbs like .get(), .post(), .put(), .patch() et all.
 
 Syntax for Post request:
 
@@ -19,23 +23,23 @@ Syntax for Post request:
     factory = APIRequestFactory()
     request = factory.post(uri, post data)
 
-Now let us test the retrive polls view. And it should look like the following way.
+Lets add a test for the polls list.
 
 .. code-block:: python
 
     from rest_framework.test import APITestCase
     from rest_framework.test import APIRequestFactory
 
-    from pollsapi import views
+    from polls import apiviews
 
 
     class TestPoll(APITestCase):
         def setUp(self):
             self.factory = APIRequestFactory()
-            self.view = views.PollList.as_view()
+            self.view = apiviews.PollViewSet.as_view({'get': 'list'})
             self.uri = '/polls/'
 
-        def test_get(self):
+        def test_list(self):
             request = self.factory.get(self.uri)
             response = self.view(request)
             self.assertEqual(response.status_code, 200,
@@ -43,7 +47,8 @@ Now let us test the retrive polls view. And it should look like the following wa
                              .format(response.status_code))
 
 
-In the above lines of code, we are trying to access the PollList view. It should result us HTTP response code 200.
+
+In the above lines of code, we are trying to access the PollList view. We are asserting that the HTTP response code is 200.
 
 Now run the test command.
 
@@ -53,44 +58,79 @@ Now run the test command.
 
 And it will display the below message.
 
-.. code-block:: python
-
+.. code-block:: bash
 
     Creating test database for alias 'default'...
+    System check identified no issues (0 silenced).
     F
     ======================================================================
-    FAIL: test_get (pollsapi.test_poll.TestPoll)
+    FAIL: test_list (polls.tests.TestPoll)
     ----------------------------------------------------------------------
     Traceback (most recent call last):
-      File "/Users/rakeshvidyachandra/code2/django_pollsapi/pollsapi/test_poll.py", line 13, in test_get
+      File "/Users/shabda/repos/building-api-django/pollsapi/polls/tests.py", line 19, in test_list
         .format(response.status_code))
-    AssertionError: Expected Response Code 200, received 401 instead.
+    AssertionError: 401 != 200 : Expected Response Code 200, received 401 instead.
 
     ----------------------------------------------------------------------
-    Ran 1 tests in 0.001s
+    Ran 1 test in 0.002s
 
     FAILED (failures=1)
+    Destroying test database for alias 'default'...
+
+Ouch! Our test failed. This happened because the view is not accessable without authentication. So we need to create a user and test the view after getting authenticated.
 
 
-Ouch! Our test failed. This happened because the view is not accessable with out authentication. So we need to create a user and test the view after getting authenticated.
+Testing APIs with authentication
+------------------------------------
 
-
-Testing authentication
-------------------------
-
-To test authentication, a test user needs to be created so that we can check whether the authentication is working smooth. Let's right away create a test user. Save the following code in pollsapi/tests/setup_user
+To test apis with authentication, a test user needs to be created so that we can make requests in context of that user. Let's create a test user. Change your tests to
 
 .. code-block:: python
 
-    from django.contrib.auth.models import User
+    from django.contrib.auth import get_user_model
+    # ...
+
+    class TestPoll(APITestCase):
+        def setUp(self):
+            # ...
+            self.user = self.setup_user()
+
+        @staticmethod
+        def setup_user():
+            User = get_user_model()
+            return User.objects.create_user(
+                'test',
+                email='testuser@test.com',
+                password='test'
+            )
+
+        def test_list(self):
+            request = self.factory.get(self.uri)
+            request.user = self.user
+            response = self.view(request)
+            self.assertEqual(response.status_code, 200,
+                             'Expected Response Code 200, received {0} instead.'
+                             .format(response.status_code))
 
 
-    def setup_user():
-        test_user = User.objects.create_user('test', email='testuser@test.com',
-                                             password='test')
-        test_user.save()
-        user = User.objects.get(username='test')
-        return user
+Now run the test command.
+
+.. code-block:: python
+
+    python manage.py test
+
+You should get this response
+
+.. code-block:: bash
+
+    Creating test database for alias 'default'...
+    System check identified no issues (0 silenced).
+    .
+    ----------------------------------------------------------------------
+    Ran 1 test in 0.119s
+
+    OK
+    Destroying test database for alias 'default'...
 
 Let us use the .force_authenticate method and force all requests by the test client every time it access the view. This makes the test user automatically treated as authenticated. This becomes handy while testing API and if we dont want to create a valid authentication credentials everytime we make a request. We shall use the same get() but with authentication added to it. The whole part looks as follows.
 
