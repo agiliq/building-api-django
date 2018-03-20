@@ -1,8 +1,8 @@
-Serialiering and Deserializing Data
+Serializing and Deserializing Data
 ========================================
 
 DRF makes the process of building web API's simple and flexible. With batteries included,
-it comes with well designed base classes to allows to serialize and deserialize data.
+it comes with well designed base classes which allows us to serialize and deserialize data.
 
 
 Serialization and Deserialization
