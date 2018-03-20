@@ -258,16 +258,12 @@ Time to celebrate with the API :)
 Continuous integration with CircleCI
 ---------------------------------------
 
-Maintaining a solid rapport with the ongoing software development process always turns out to be a walk on air. Ensuring a software build integrity and quality in every single commit makes it much more exciting.
+We have the tests, but we also want it to run on every commit. If you are using Github, CircleCI provides a very well in integrated servive to run you tests. We will use Circleci. v2
 
-If the current software bulid is constantly available for testing, demo or release isn't it a developer's paradise on earth?
-Giving a cold shoulder to "Integration hell" the 'Continuous integration' process stands out to deliver all the above assets.
+We can configure our application to use Circle CI  by adding a file named :code:`.circleci/circle.yml` which is a YAML(a human-readable data serialization format) text file. It automatically detects when a commit has been made and pushed to a Github repository that is using CircleCI, and each time this happens, it will try to build the project and runs tests. The build failure or success is notified to the developer.
 
-Let us use circle CI software for our App.
-
-We can configure our application to use Circle CI  by adding a file named circle.yml which is a YAML(a human-readable data serialization format) text file. It automatically detects when a commit has been made and pushed to a GitHub repository that is using Circle CI, and each time this happens, it will try to build the project and runs tests. It also builds and once it is completed it notifies the developer in the way it is configured.
-
-Steps to use Circle CI:
+Setting up CircleCI
+---------------------------------------
 
 - Sign-in: To get started with Circle CI we can sign-in with our github account on circleci.com.
 - Activate Github webhook: Once the Signup process gets completed we need to enable the service hook in the github profile page.
@@ -275,50 +271,75 @@ Steps to use Circle CI:
 
 Writing circle.yml file
 ------------------------
-In order for circle CI to build our project we need to tell the system a little bit about it. we will be needed to add a file named circle.yml to the root of our repository. The basic options in the circle.yml should contain are language key which tells which language environment to select for our project and other options include the version of the language and command to run the tests, etc.
 
-Below are the keywords that are used in writting circle.yml file.
+In order for circle CI to build our project we need to tell the system a little bit about it. we will be needed to add a file named :code:`.circleci/config.yml` to the root of our repository. We also need to create a :code:`pollsapi/requirements.txt` to define our dependencies.
 
-- machine: adjusting the VM to your preferences and requirements
-- checkout: checking out and cloning your git repo
-- dependencies: setting up your project's language-specific dependencies
-- database: preparing the databases for your tests
-- test: running your tests
-- deployment: deploying your code to your web servers
+Add this to your :code:`pollsapi/requirements.txt`
 
+.. code-block:: txt
 
-- pre: commands run before CircleCI's inferred commands
-- override: commands run instead of CircleCI's inferred commands
-- post: commands run after CircleCI's inferred commands
+    Django==2.0.3
+    djangorestframework==3.7.7
+
+And then add this to :code:`.circleci/config.yml`
 
 
-Example for circle.yml for python project:
+.. code-block:: yaml
 
-.. code-block:: python
-
-    ## Customize the test machine
-    machine:
-
-      timezone:
-        Asia/Kolkata # Set the timezone
-
-      # Version of python to use
-      python:
-        version: 2.7.5
-
-    dependencies:
-      pre:
-        - pip install -r requirements.txt
-
-    test:
-      override:
-        - python manage.py test
-
-From now onwards whenever we push our code to our repository a new build will be created for it and the running of the test cases will be taken place. It gives us the potential to check how good our development process is taking place with out hitting a failed test case.
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/python:3.6.1
 
 
+    working_directory: ~/repo
 
+    steps:
+      - checkout
 
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "pollsapi/requirements.txt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
 
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r pollsapi/requirements.txt
 
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
 
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            cd pollsapi
+            python manage.py test
+
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports
+
+Below are the important keywords that are used in writting circle.yml file.
+
+- :code:`image`: Defines the base image including the language and version to use
+- :code:`run`: It specifies a :code:`command` which will be run to setup environent and run tests. :code:`pip install -r pollsapi/requirements.txt` sets up the environment and :code:`pip install -r pollsapi/requirements.txt`
+
+If everything passed successfully, you should see a green checkmark
+
+.. image:: circleci.png
+
+Congratulations, you have tests running in a CI environment.
+
+From now onwards whenever we push our code to our repository a new build will be created for it and the tests will run.
+
+We are at the end of the first part of our book. You can read the appendix, which tell about some documentation tools and api consumption tools. Go forward and build some amazing apps and apis.
