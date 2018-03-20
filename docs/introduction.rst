@@ -6,7 +6,7 @@ Introductions
 Who is this book for?
 -------------------------
 
-If you have finished the Django "Polls" tuorial, and want to learn using DRF to build APIs, this book is perfect for you. This book assume some knowledge of Django and Python, which you should have built if you have finished the "Poll" turtorial. No existing knowledge of DRF is assumed.
+If you have finished the Django "Polls" tuorial, and want to learn using DRF to build APIs, this book is perfect for you. This book assume some knowledge of Django and Python, which you should have built if you have finished the "Poll" tutorial. No existing knowledge of DRF is assumed.
 
 
 How to read this book?
