@@ -1,4 +1,4 @@
-Serialiering and Deserializing Data
+Serializing and Deserializing Data
 ========================================
 
 DRF makes the process of building web API's simple and flexible. With batteries included,
