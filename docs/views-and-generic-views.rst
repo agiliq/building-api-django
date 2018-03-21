@@ -200,7 +200,7 @@ Let us add the view to create choices and for voting. We will look more closely 
         serializer_class = VoteSerializer
 
 
-Conect the new apiviews to urls.py.
+Connect the new apiviews to urls.py.
 
 .. code-block:: python
 

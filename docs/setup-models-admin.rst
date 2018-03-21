@@ -109,7 +109,7 @@ The above models have been designed in such a way that, it would make our API bu
 Activating models
 ----------------------
 
-With the simple lines of code in the 'models.py' Django can create a database schema and a Python database-access API which has the capablity to access the objects of Poll, Choice, Vote. To create the database tables to our models, 'rest_framework' and 'pollsapi' app needs to be added to the "INSTALLED_APPS" in the 'django_pollsapi/settings' file.
+With the simple lines of code in the 'models.py' Django can create a database schema and a Python database-access API which has the capability to access the objects of Poll, Choice, Vote. To create the database tables to our models, 'rest_framework' and 'pollsapi' app needs to be added to the "INSTALLED_APPS" in the 'django_pollsapi/settings' file.
 
 .. code-block:: python
 

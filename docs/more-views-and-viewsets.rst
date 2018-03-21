@@ -10,10 +10,10 @@ We have three API endpoints
 - :code:`/choices/`
 - :code:`/vote/`
 
-They get the work done, but we can make our API more intutive by nesting them correctly. Our redesigned urls look like this:
+They get the work done, but we can make our API more intuitive by nesting them correctly. Our redesigned urls look like this:
 
 - :code:`/polls/` and :code:`/polls/<pk>`
-- :code:`/polls/<pk>/choices/` to GET the choices for a specfifc poll, and to create choices for a specific poll. (Idenitfied by the :code:`<pk>`)
+- :code:`/polls/<pk>/choices/` to GET the choices for a specific poll, and to create choices for a specific poll. (Idenitfied by the :code:`<pk>`)
 - :code:`/polls/<pk>/choices/<choice_pk>/vote/` - To vote for the choice identified by :code:`<choice_pk>` under poll with :code:`<pk>`.
 
 Changing the views
@@ -145,7 +145,7 @@ And for :code:`CreateVote`,
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-We pass on poll id and choice id. We subclass this from :code:`APIView`, rather than a generic view, because we competely customize the behaviour. This is similiar to our earlier :code:`APIView`, where in we are passing the data to a serializer, and saving or returnning an error depending on whether the serializer is valid.
+We pass on poll id and choice id. We subclass this from :code:`APIView`, rather than a generic view, because we competely customize the behaviour. This is similar to our earlier :code:`APIView`, where in we are passing the data to a serializer, and saving or returning an error depending on whether the serializer is valid.
 
 Introducing Viewsets and Routers
 -----------------------------------
@@ -200,7 +200,7 @@ We have seen 4 ways to build API views until now
 
 So which one should you use when? My rule of thumb is,
 
-- Use :code:`viewsets.ModelViewSet` when you are goin to allow all or most of crud operations on a model.
+- Use :code:`viewsets.ModelViewSet` when you are goin to allow all or most of CRUD operations on a model.
 - Use :code:`generics.*` when you only want to allow some operations on a model
 - Use :code:`APIView` when you want to completely customize the behaviour.
 

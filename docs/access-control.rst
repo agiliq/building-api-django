@@ -145,7 +145,7 @@ Also, dont forget to give exemption to :code:`UserCreate` view for authenticatio
         permission_classes = ()
         serializer_class = UserSerializer
 
-Note the :code:`authentication_classes = ()` and :code:`permission_classes = ()` to excempt :code:`UserCreate` from global authentication scheme.
+Note the :code:`authentication_classes = ()` and :code:`permission_classes = ()` to exempt :code:`UserCreate` from global authentication scheme.
 
 We want to ensure that tokens are created when user is created in :code:`UserCreate` view, so we update the :code:`UserSerializer`. Change your :code:`serailizers.py` like this
 
@@ -296,4 +296,4 @@ Similarly trying to create choice for someone else's :code:`Poll` will get an er
 Next steps:
 -----------------
 
-In the next chapter we will look at adding tests for our API and serailizers. We will also look at how to use :code:`flake8` and run our tests in a CI environment.
+In the next chapter we will look at adding tests for our API and serializers. We will also look at how to use :code:`flake8` and run our tests in a CI environment.
