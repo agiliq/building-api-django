@@ -276,7 +276,7 @@ In order for circle CI to build our project we need to tell the system a little 
 
 Add this to your :code:`pollsapi/requirements.txt`
 
-.. code-block:: txt
+.. code-block:: text
 
     Django==2.0.3
     djangorestframework==3.7.7
@@ -286,48 +286,48 @@ And then add this to :code:`.circleci/config.yml`
 
 .. code-block:: yaml
 
-version: 2
-jobs:
-  build:
-    docker:
-      # specify the version you desire here
-      - image: circleci/python:3.6.1
+  version: 2
+  jobs:
+    build:
+      docker:
+        # specify the version you desire here
+        - image: circleci/python:3.6.1
 
 
-    working_directory: ~/repo
+      working_directory: ~/repo
 
-    steps:
-      - checkout
+      steps:
+        - checkout
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "pollsapi/requirements.txt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+        # Download and cache dependencies
+        - restore_cache:
+            keys:
+            - v1-dependencies-{{ checksum "pollsapi/requirements.txt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
 
-      - run:
-          name: install dependencies
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r pollsapi/requirements.txt
+        - run:
+            name: install dependencies
+            command: |
+              python3 -m venv venv
+              . venv/bin/activate
+              pip install -r pollsapi/requirements.txt
 
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
+        - save_cache:
+            paths:
+              - ./venv
+            key: v1-dependencies-{{ checksum "requirements.txt" }}
 
-      - run:
-          name: run tests
-          command: |
-            . venv/bin/activate
-            cd pollsapi
-            python manage.py test
+        - run:
+            name: run tests
+            command: |
+              . venv/bin/activate
+              cd pollsapi
+              python manage.py test
 
-      - store_artifacts:
-          path: test-reports
-          destination: test-reports
+        - store_artifacts:
+            path: test-reports
+            destination: test-reports
 
 Below are the important keywords that are used in writting circle.yml file.
 
