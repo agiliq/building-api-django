@@ -2,7 +2,7 @@ Testing and Continuous Integeration
 ==========================================
 
 
-In this chapater we will add test to our API.
+In this chapter we will add test to our API.
 
 DRF provides a few important classes which makes testing APIs simpler. We will be using these classes later in the chapter in our tests.
 
@@ -14,7 +14,7 @@ Now lets us write test cases to our polls application.
 
 Creating Test Requests
 ------------------------
-Django's 'Requestfactory' has the capability to create request instances which allow us in testing view functions induvidually. Django Rest Framework has a class called 'APIRequestFactory' which extends the standard Django's  'Requestfactory'. This class contains almost all the http verbs like .get(), .post(), .put(), .patch() et all.
+Django's 'Requestfactory' has the capability to create request instances which allow us in testing view functions individually. Django Rest Framework has a class called 'APIRequestFactory' which extends the standard Django's  'RequestFactory'. This class contains almost all the http verbs like .get(), .post(), .put(), .patch() et all.
 
 Syntax for Post request:
 
@@ -258,7 +258,7 @@ Time to celebrate with the API :)
 Continuous integration with CircleCI
 ---------------------------------------
 
-We have the tests, but we also want it to run on every commit. If you are using Github, CircleCI provides a very well in integrated servive to run you tests. We will use Circleci. v2
+We have the tests, but we also want it to run on every commit. If you are using Github, CircleCI provides a very well in integrated service to run your tests. We will use Circleci. v2
 
 We can configure our application to use Circle CI  by adding a file named :code:`.circleci/circle.yml` which is a YAML(a human-readable data serialization format) text file. It automatically detects when a commit has been made and pushed to a Github repository that is using CircleCI, and each time this happens, it will try to build the project and runs tests. The build failure or success is notified to the developer.
 

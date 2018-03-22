@@ -1,7 +1,7 @@
 Documenting API with RAML
 ============================
 
-In this chapater we will see how to use raml for all the views of our API.
+In this chapter we will see how to use raml for all the views of our API.
 
 RAML is an acronym for "RESTful API Modeling Language". It is a YAML based language for describing the RESTful APIs. RAML contains certain sections for describing the APIs. Each section has it's purpose and we'll look into each one of these by using our polls application.
 
