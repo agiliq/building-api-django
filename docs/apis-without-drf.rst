@@ -93,6 +93,6 @@ Why do we need DRF?
 **(DRF = Django Rest Framework)**
 
 We were able to build the API with just Django, without using DRF, so why do we need DRF?
-Almost always, you will need common tasks with your APIs, such as access control, serailization, rate limiting and more.
+Almost always, you will need common tasks with your APIs, such as access control, serialization, rate limiting and more.
 
 DRF provides a well thought out set of base components and convenient hook points for building APIs. We will be using DRF in the rest of the chapters.

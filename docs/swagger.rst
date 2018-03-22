@@ -1,7 +1,7 @@
 Documenting APIs with Swagger
 =============================
 
-In this chapater we will see how to use swagger for all the views of our API.
+In this chapter we will see how to use swagger for all the views of our API.
 
 Swagger is a tool used to understand the capabilities of the service without access to source code, documentation, or through network traffic inspection. In simple terms, with swagger you can see what all API end points are available for a web application. You can use swagger for testing the requests and responses of the API endpoints.
 
@@ -156,7 +156,7 @@ Now open the swagger UI in your browser from http://localhost:8000/ and enter ht
 Note
 --------
 
-You may get errors while running both swagger and the JSON file with SimpleHTTPServer locally saying "It may not have the appropriate access-control-origin settings." That's because the server running swagger doesn't have access over the other server. In order to resolve this, we need give the access control. We can do this by writing a custom class and running the server using this. We'll write the custom class in a seperate file called simple-cors-http-server.py.
+You may get errors while running both swagger and the JSON file with SimpleHTTPServer locally saying "It may not have the appropriate access-control-origin settings." That's because the server running swagger doesn't have access over the other server. In order to resolve this, we need give the access control. We can do this by writing a custom class and running the server using this. We'll write the custom class in a separate file called simple-cors-http-server.py.
 
 
 .. code-block:: python
