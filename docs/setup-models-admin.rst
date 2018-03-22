@@ -121,7 +121,7 @@ With the simple lines of code in the 'models.py' Django can create a database sc
 
 Now, run the :code:`makemigrations` command which will notify Django that new models have been created and those changes needs to be applied to the migration. Run :code:`migrate` command to do the actual migration.
 
-.. code-block:: python
+.. code-block:: bash
 
     $ python manage.py makemigrations polls
 
