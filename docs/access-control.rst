@@ -185,8 +185,11 @@ Add a view and connect it to urls.
 
     # in apiviews.py
     # ...
+    from django.contrib.auth import authenticate
 
     class LoginView(APIView):
+        permission_classes = ()
+        
         def post(self, request,):
             username = request.data.get("username")
             password = request.data.get("password")
