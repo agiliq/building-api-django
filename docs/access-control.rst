@@ -147,7 +147,7 @@ Also, dont forget to give exemption to :code:`UserCreate` view for authenticatio
 
 Note the :code:`authentication_classes = ()` and :code:`permission_classes = ()` to exempt :code:`UserCreate` from global authentication scheme.
 
-We want to ensure that tokens are created when user is created in :code:`UserCreate` view, so we update the :code:`UserSerializer`. Change your :code:`serailizers.py` like this
+We want to ensure that tokens are created when user is created in :code:`UserCreate` view, so we update the :code:`UserSerializer`. Change your :code:`serializers.py` like this
 
 .. code-block:: python
 
