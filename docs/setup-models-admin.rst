@@ -33,7 +33,7 @@ This command gives us a 'pollsapi' directoy. The contents of this directory look
 Database setup
 ------------------
 
-We will use SQlite database, which is already included with Python. The :code:`pollsapi/settings.py` file woul already have the correct settings.
+We will use SQlite database, which is already included with Python. The :code:`pollsapi/settings.py` file would already have the correct settings.
 
 .. code-block:: python
 
