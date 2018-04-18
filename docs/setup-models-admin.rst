@@ -14,13 +14,13 @@ First things first, let's install the required modules within a virtual environm
 Creating a project
 --------------------
 
-Earliest in order, to create a project we should move to the directory where we would like to store our code. For this go to command line and use cd command. Then trigger the startproject command.
+Earliest in order, to create a project we should move to the directory where we would like to store our code. For this go to command line and use cd command. Then trigger the `startproject` command.
 
 .. code-block:: python
 
     django-admin startproject pollsapi
 
-This command gives us a 'pollsapi' directoy. The contents of this directory look like this::
+This command gives us a 'pollsapi' directory. The contents of this directory looks like this::
 
     manage.py
 
@@ -68,7 +68,7 @@ The above command results in a 'polls' directory containing different files::
     tests.py
     views.py
 
-Step in to 'models.py' file and start writing the models. For creating the polls api we are going to create a :code:`Poll` model, a :code:`Choice` model and a :code:`Vote` model. Once we are done with designing our models, the :code:'models.py' file should look like this:
+Step in to :code:`models.py` file and start writing the models. For creating the polls api we are going to create a :code:`Poll` model, a :code:`Choice` model and a :code:`Vote` model. Once we are done with designing our models, the :code:'models.py' file should look like this:
 
 These models are the same as you would have seen in the Django introduction tutorial.
 
