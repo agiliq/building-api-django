@@ -68,7 +68,7 @@ The above command results in a 'polls' directory containing different files::
     tests.py
     views.py
 
-Step in to 'models.py' file and start writing the models. For creating the polls api we are going to create a :code:`Poll` model, a :code:`Choice` model and a :code:`Vote` model. Once we are done with designing our models, the :code:'models.py' file should look like this:
+Step in to 'models.py' file and start writing the models. For creating the polls api we are going to create a :code:`Poll` model, a :code:`Choice` model and a :code:`Vote` model. Once we are done with designing our models, the :code:`models.py` file should look like this:
 
 These models are the same as you would have seen in the Django introduction tutorial.
 
