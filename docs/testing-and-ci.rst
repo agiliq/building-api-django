@@ -240,16 +240,16 @@ We are asserting that the the http code is 201 if the test passes succesfully. L
 
 .. code-block:: bash
 
-python manage.py test polls.tests.TestPoll.test_create
+    python manage.py test polls.tests.TestPoll.test_create
 
-Creating test database for alias 'default'...
-System check identified no issues (0 silenced).
-.
-----------------------------------------------------------------------
-Ran 1 test in 0.267s
+    Creating test database for alias 'default'...
+    System check identified no issues (0 silenced).
+    .
+    ----------------------------------------------------------------------
+    Ran 1 test in 0.267s
 
-OK
-Destroying test database for alias 'default'...
+    OK
+    Destroying test database for alias 'default'...
 
 
 Time to celebrate with the API :)
