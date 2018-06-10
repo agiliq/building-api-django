@@ -46,7 +46,7 @@ Add swagger to your urls.
         path(r'swagger-docs/', schema_view),
     ]
 
-And your swagger docs are ready in all their glory.
+Navigate to `/swagger-docs/`. And your swagger docs are ready in all their glory.
 
 .. image:: swagger.png
 
