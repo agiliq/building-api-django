@@ -189,7 +189,7 @@ Add a view and connect it to urls.
 
     class LoginView(APIView):
         permission_classes = ()
-        
+
         def post(self, request,):
             username = request.data.get("username")
             password = request.data.get("password")
@@ -228,6 +228,19 @@ POST with a incorrect username and password, and you will get a response like th
     {
         "error": "Wrong Credentials"
     }
+
+Another way to create this login endpoint is using :code:`obtain_auth_token` method provide by DRF
+
+.. code-block:: python
+
+    # in urls.py
+    # ...
+    from rest_framework.authtoken import views
+
+    urlpatterns = [
+        path("login/", views.obtain_auth_token, name="login"),
+        # ...
+    ]
 
 
 Fine grained access control
