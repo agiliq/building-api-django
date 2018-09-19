@@ -51,7 +51,7 @@ We will now write the :code:`polls_list` and :code:`polls_detail`
 
     def polls_list(request):
         MAX_OBJECTS = 20
-        polls = Poll.objects.all()[:20]
+        polls = Poll.objects.all()[:MAX_OBJECTS]
         data = {"results": list(polls.values("question", "created_by__username", "pub_date"))}
         return JsonResponse(data)
 
