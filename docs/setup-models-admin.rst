@@ -88,7 +88,7 @@ These models are the same as you would have seen in the Django introduction tuto
 
 
     class Choice(models.Model):
-        poll = models.ForeignKey(Poll, related_name='choices',on_delete=models.CASCADE)
+        poll = models.ForeignKey(Poll, related_name='choices', on_delete=models.CASCADE)
         choice_text = models.CharField(max_length=100)
 
         def __str__(self):

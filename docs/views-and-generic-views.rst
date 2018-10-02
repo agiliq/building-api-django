@@ -284,7 +284,7 @@ You will get a response like this
 .. code-block:: json
 
     {
-        "poll": [
+        "choice_text": [
             "This field is required."
         ]
     }
