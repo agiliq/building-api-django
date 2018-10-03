@@ -260,7 +260,7 @@ Continuous integration with CircleCI
 
 We have the tests, but we also want it to run on every commit. If you are using Github, CircleCI provides a very well in integrated service to run your tests. We will use Circleci. v2
 
-We can configure our application to use Circle CI  by adding a file named :code:`.circleci/circle.yml` which is a YAML(a human-readable data serialization format) text file. It automatically detects when a commit has been made and pushed to a Github repository that is using CircleCI, and each time this happens, it will try to build the project and runs tests. The build failure or success is notified to the developer.
+We can configure our application to use Circle CI  by adding a file named :code:`.circleci/config.yml` which is a YAML(a human-readable data serialization format) text file. It automatically detects when a commit has been made and pushed to a Github repository that is using CircleCI, and each time this happens, it will try to build the project and runs tests. The build failure or success is notified to the developer.
 
 Setting up CircleCI
 ---------------------------------------
