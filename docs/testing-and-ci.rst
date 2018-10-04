@@ -260,17 +260,17 @@ Continuous integration with CircleCI
 
 We have the tests, but we also want it to run on every commit. If you are using Github, CircleCI provides a very well in integrated service to run your tests. We will use Circleci. v2
 
-We can configure our application to use Circle CI  by adding a file named :code:`.circleci/circle.yml` which is a YAML(a human-readable data serialization format) text file. It automatically detects when a commit has been made and pushed to a Github repository that is using CircleCI, and each time this happens, it will try to build the project and runs tests. The build failure or success is notified to the developer.
+We can configure our application to use Circle CI  by adding a file named :code:`.circleci/config.yml` which is a YAML(a human-readable data serialization format) text file. It automatically detects when a commit has been made and pushed to a Github repository that is using CircleCI, and each time this happens, it will try to build the project and runs tests. The build failure or success is notified to the developer.
 
 Setting up CircleCI
 ---------------------------------------
 
 - Sign-in: To get started with Circle CI we can sign-in with our github account on circleci.com.
 - Activate Github webhook: Once the Signup process gets completed we need to enable the service hook in the github profile page.
-- Add circle.yml: We should add the yml file to the project.
+- Add .circle/config.yml: We should add the yml file to the project.
 
-Writing circle.yml file
-------------------------
+Writing circle configuration file
+---------------------------------------
 
 In order for circle CI to build our project we need to tell the system a little bit about it. we will be needed to add a file named :code:`.circleci/config.yml` to the root of our repository. We also need to create a :code:`pollsapi/requirements.txt` to define our dependencies.
 
@@ -329,7 +329,7 @@ And then add this to :code:`.circleci/config.yml`
             path: test-reports
             destination: test-reports
 
-Below are the important keywords that are used in writting circle.yml file.
+Below are the important keywords that are used in writting circleci config.yml file.
 
 - :code:`image`: Defines the base image including the language and version to use
 - :code:`run`: It specifies a :code:`command` which will be run to setup environent and run tests. :code:`pip install -r pollsapi/requirements.txt` sets up the environment and :code:`pip install -r pollsapi/requirements.txt`
