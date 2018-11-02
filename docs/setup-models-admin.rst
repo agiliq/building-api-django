@@ -141,7 +141,9 @@ Create an empty :code:`urls.py` in your :code:`polls` app.
 Go to :code:`pollsapi/urls.py` and include the polls urls.
 
 .. code-block:: python
-
+    
+    from django.urls import include, re_path
+    
     urlpatterns = [
         re_path(r'^', include('polls.urls')),
     ]
