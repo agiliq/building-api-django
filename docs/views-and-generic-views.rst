@@ -83,7 +83,7 @@ Using DRF generic views to simplify code
 
 The :code:`PollList` and :code:`PollDetail` get the work done, but there are bunch of common operations, we can do it in abstract away.
 
-The generic views of Django Rest Framework help us in code reusablity. They infer the response format and allowed methods from the serilizer class and base class.
+The generic views of Django Rest Framework help us in code reusablity. They infer the response format and allowed methods from the serializer class and base class.
 
 Change your :code:`apiviews.py` to the below code, and leave urls.py as is.
 
@@ -205,6 +205,8 @@ Connect the new apiviews to urls.py.
 .. code-block:: python
 
     # ...
+    from .apiviews import ChoiceList, CreateVote, # ...
+
     urlpatterns = [
         # ...
         path("choices/", ChoiceList.as_view(), name="choice_list"),
