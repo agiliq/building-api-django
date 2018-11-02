@@ -107,7 +107,7 @@ Lets get back to :code:`ChoiceList`.
         path("polls/<int:pk>/choices/", ChoiceList.as_view(), name="choice_list"),
     ]
 
-    # views.py
+    # apiviews.py
     # ...
 
     class ChoiceList(generics.ListCreateAPIView):
@@ -130,7 +130,7 @@ And for :code:`CreateVote`,
         path("polls/<int:pk>/choices/<int:choice_pk>/vote/", CreateVote.as_view(), name="polls_list"),
     ]
 
-    # views.py
+    # apiviews.py
     # ...
 
     class CreateVote(APIView):
@@ -161,6 +161,8 @@ This is what it will look like:
     # urls.py
     # ...
     from rest_framework.routers import DefaultRouter
+    from .apiviews import PollViewSet
+
 
     router = DefaultRouter()
     router.register('polls', PollViewSet, base_name='polls')
@@ -172,7 +174,7 @@ This is what it will look like:
 
     urlpatterns += router.urls
 
-    # views.py
+    # apiviews.py
     # ...
     from rest_framework import viewsets
 
@@ -200,7 +202,7 @@ We have seen 4 ways to build API views until now
 
 So which one should you use when? My rule of thumb is,
 
-- Use :code:`viewsets.ModelViewSet` when you are goin to allow all or most of CRUD operations on a model.
+- Use :code:`viewsets.ModelViewSet` when you are going to allow all or most of CRUD operations on a model.
 - Use :code:`generics.*` when you only want to allow some operations on a model
 - Use :code:`APIView` when you want to completely customize the behaviour.
 

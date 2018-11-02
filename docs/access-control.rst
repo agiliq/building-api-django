@@ -30,6 +30,10 @@ We will add an user serializer, which will allow creating. Add the following cod
 
 .. code-block:: python
 
+    # ...
+    from django.contrib.auth.models import User
+    
+    # ...
     class UserSerializer(serializers.ModelSerializer):
 
         class Meta:
