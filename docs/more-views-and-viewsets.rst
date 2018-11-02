@@ -107,7 +107,7 @@ Lets get back to :code:`ChoiceList`.
         path("polls/<int:pk>/choices/", ChoiceList.as_view(), name="choice_list"),
     ]
 
-    # views.py
+    # apiviews.py
     # ...
 
     class ChoiceList(generics.ListCreateAPIView):
@@ -130,7 +130,7 @@ And for :code:`CreateVote`,
         path("polls/<int:pk>/choices/<int:choice_pk>/vote/", CreateVote.as_view(), name="polls_list"),
     ]
 
-    # views.py
+    # apiviews.py
     # ...
 
     class CreateVote(APIView):
@@ -174,7 +174,7 @@ This is what it will look like:
 
     urlpatterns += router.urls
 
-    # views.py
+    # apiviews.py
     # ...
     from rest_framework import viewsets
 
