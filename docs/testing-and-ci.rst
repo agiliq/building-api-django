@@ -88,12 +88,15 @@ To test apis with authentication, a test user needs to be created so that we can
 .. code-block:: python
 
     from django.contrib.auth import get_user_model
+    from rest_framework.authtoken.models import Token
     # ...
 
     class TestPoll(APITestCase):
         def setUp(self):
             # ...
             self.user = self.setup_user()
+            self.token = Token.objects.create(user=self.user)
+            self.token.save()
 
         @staticmethod
         def setup_user():
@@ -105,7 +108,8 @@ To test apis with authentication, a test user needs to be created so that we can
             )
 
         def test_list(self):
-            request = self.factory.get(self.uri)
+            request = self.factory.get(self.uri, 
+                HTTP_AUTHORIZATION='Token {}'.format(self.token.key))
             request.user = self.user
             response = self.view(request)
             self.assertEqual(response.status_code, 200,
@@ -343,3 +347,4 @@ Congratulations, you have tests running in a CI environment.
 From now onwards whenever we push our code to our repository a new build will be created for it and the tests will run.
 
 We are at the end of the first part of our book. You can read the appendix, which tell about some documentation tools and api consumption tools. Go forward and build some amazing apps and apis.
+
