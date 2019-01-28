@@ -248,7 +248,7 @@ The response looks like this
         "poll": 2
     }
 
-You can also retrieve the :code:`Poll` to by doing a :code:`GET` to :code:`/poll/<pk>/`. You should get something like this
+You can also retrieve the :code:`Poll` to by doing a :code:`GET` to :code:`/polls/<pk>/`. You should get something like this
 
 .. code-block:: json
 
