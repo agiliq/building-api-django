@@ -118,7 +118,7 @@ With Django Rest Framework, we can set up a default authentication scheme which 
         )
     }
 
-You also need to enable :code:`rest_framework.authtoken` app, the so update :code:`INSTALLED_APPS` in your settings.py.
+You also need to enable :code:`rest_framework.authtoken` app, so update :code:`INSTALLED_APPS` in your settings.py.
 
 .. code-block:: python
 
