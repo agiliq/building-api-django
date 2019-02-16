@@ -216,6 +216,14 @@ Add a view and connect it to urls.
         # ...
     ]
 
+WARNING: You have to create a user using the :code:`/user/` endpoint before logging in using the :code:`/login/` endpoint. Using a previously existing user will result in a "User has no auth_token" error because we have not created a token for them. You can create tokens for them manually by using the django shell :code:`$ python manage.py shell`.
+
+    >>> from django.contrib.auth.models import User
+    >>> from rest_framework.authtoken.models import Token
+    >>> user = User.objects.get(pk=pk_of_user_without_token)
+    >>> Token.objects.create(user=user)
+    <Token: e2b9fa2d4ae27fe1fdcf17b6e37711334d07e167>
+
 Do a POST with a correct username and password, and you will get a response like this.
 
 .. code-block:: json
