@@ -301,8 +301,8 @@ We will do that by overriding :code:`PollViewSet.destroy` and :code:`ChoiceList.
                 raise PermissionDenied("You can not create choice for this poll.")
             return super().post(request, *args, **kwargs)
 
-In both cases, we are checkeding the :code:`request.user` against the expected user, and raising
-as :code:`PermissionDenied` if it does not match.
+In both cases, we are checking :code:`request.user` against the expected user, and raising
+a :code:`PermissionDenied` error if it does not match.
 
 You can check this by doing a DELETE on someone elses :code:`Poll`. You will get an error with :code:`HTTP 403 Forbidden` and response.
 
@@ -314,7 +314,7 @@ You can check this by doing a DELETE on someone elses :code:`Poll`. You will get
     }
 
 
-Similarly trying to create choice for someone else's :code:`Poll` will get an error with :code:`HTTP 403 Forbidden` and response
+Similarly, trying to create choice for someone else's :code:`Poll` will get an error with :code:`HTTP 403 Forbidden` and response
 
 .. code-block:: json
 
