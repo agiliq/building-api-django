@@ -118,7 +118,7 @@ With Django Rest Framework, we can set up a default authentication scheme which 
         )
     }
 
-You also need to enable :code:`rest_framework.authtoken` app, the so update :code:`INSTALLED_APPS` in your settings.py.
+You also need to enable :code:`rest_framework.authtoken` app, so update :code:`INSTALLED_APPS` in your settings.py.
 
 .. code-block:: python
 
@@ -159,27 +159,27 @@ We want to ensure that tokens are created when user is created in :code:`UserCre
 
     class UserSerializer(serializers.ModelSerializer):
 
-            class Meta:
-                model = User
-                fields = ('username', 'email', 'password')
-                extra_kwargs = {'password': {'write_only': True}}
+        class Meta:
+            model = User
+            fields = ('username', 'email', 'password')
+            extra_kwargs = {'password': {'write_only': True}}
 
-            def create(self, validated_data):
-                user = User(
-                    email=validated_data['email'],
-                    username=validated_data['username']
-                )
-                user.set_password(validated_data['password'])
-                user.save()
-                Token.objects.create(user=user)
-                return user
+        def create(self, validated_data):
+            user = User(
+                email=validated_data['email'],
+                username=validated_data['username']
+            )
+            user.set_password(validated_data['password'])
+            user.save()
+            Token.objects.create(user=user)
+            return user
 
 
 
 The login API
 -----------------------------
 
-Since we have added :code:`rest_framework.authentication.TokenAuthentication`, we will need to set an header like this :code:`Authorization: Token c2a84953f47288ac1943a3f389a6034e395ad940` to auhenticate. We need an API where a user can give their username and password, and get a token back.
+Since we have added :code:`rest_framework.authentication.TokenAuthentication`, we will need to set a header like this :code:`Authorization: Token c2a84953f47288ac1943a3f389a6034e395ad940` to auhenticate. We need an API where a user can give their username and password, and get a token back.
 
 We will not be adding a serializer, because we never save a token using this API.
 
