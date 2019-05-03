@@ -105,7 +105,7 @@ Change your :code:`apiviews.py` to the below code, and leave urls.py as is.
         queryset = Poll.objects.all()
         serializer_class = PollSerializer
 
-With this change, GET requests to :code:`/polls/` and :code:`/polls/<pk>/`, continue to work as was, but we have a more data available with OPTIONS.
+With this change, GET requests to :code:`/polls/` and :code:`/polls_detail/<pk>/`, continue to work as was, but we have a more data available with OPTIONS.
 
 Do an OPTIONs request to :code:`/polls/`, and you will get a response like this.
 
