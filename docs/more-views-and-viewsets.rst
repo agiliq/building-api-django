@@ -127,7 +127,7 @@ And for :code:`CreateVote`,
     #...
     urlpatterns = [
         # ...
-        path("polls/<int:pk>/choices/<int:choice_pk>/vote/", CreateVote.as_view(), name="polls_list"),
+        path("polls/<int:pk>/choices/<int:choice_pk>/vote/", CreateVote.as_view(), name="create_vote"),
     ]
 
     # apiviews.py
