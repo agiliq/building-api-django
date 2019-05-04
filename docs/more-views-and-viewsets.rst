@@ -42,7 +42,8 @@ We will make changes to :code:`ChoiceList` and :code:`CreateVote`, because the :
 
 
     class CreateVote(APIView):
-
+        serializer_class = VoteSerializer
+        
         def post(self, request, pk, choice_pk):
             voted_by = request.data.get("voted_by")
             data = {'choice': choice_pk, 'poll': pk, 'voted_by': voted_by}
