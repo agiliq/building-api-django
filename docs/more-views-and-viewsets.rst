@@ -42,7 +42,8 @@ We will make changes to :code:`ChoiceList` and :code:`CreateVote`, because the :
 
 
     class CreateVote(APIView):
-
+        serializer_class = VoteSerializer
+        
         def post(self, request, pk, choice_pk):
             voted_by = request.data.get("voted_by")
             data = {'choice': choice_pk, 'poll': pk, 'voted_by': voted_by}
@@ -140,7 +141,7 @@ And for :code:`CreateVote`,
             data = {'choice': choice_pk, 'poll': pk, 'voted_by': voted_by}
             serializer = VoteSerializer(data=data)
             if serializer.is_valid():
-                vote = serializer.save()
+                serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
