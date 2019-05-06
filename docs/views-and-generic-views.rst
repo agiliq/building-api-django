@@ -224,8 +224,8 @@ There is a lot going on here, let us look at the attributes we need to override 
 
 We have used three different classes from :code:`rest_framework.generic`. The names of the classes are representative of what they do, but lets quickly look at them.
 
-- :code:`ListCreateAPIView`: Get a list of entities, or create them. Allows GET and POST
-- :code:`RetrieveDestroyAPIView`: Retrieve and inidvidual entity details, or delete the entity. Allows GET and DELETE
+- :code:`ListCreateAPIView`: Get a list of entities, or create them. Allows GET and POST.
+- :code:`RetrieveDestroyAPIView`: Retrieve an individual entity details, or delete the entity. Allows GET and DELETE.
 - :code:`CreateAPIView`: Allows creating entities, but not listing them. Allows POST.
 
 Create some choices by POSTing to :code:`/choices/`.
