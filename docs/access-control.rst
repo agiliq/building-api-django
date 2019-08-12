@@ -9,7 +9,7 @@ We want to add these access controls.
 
 
 - A user must be authenticated to access a poll or the list of polls.
-- Only an authenicated users can create a poll.
+- Only an authenticated users can create a poll.
 - Only an authenticated user can create a choice.
 - Authenticated users can create choices only for polls they have created.
 - Authenticated users can delete only polls they have created.
