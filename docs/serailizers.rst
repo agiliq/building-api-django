@@ -66,7 +66,7 @@ Our :code:`PollSerializer` looks like this.
 What have we got with this? The :code:`PollSerializer` class has a number of methods,
 
 * A :code:`is_valid(self, ..)` method which can tell if the data is sufficient and valid to create/update a model instance.
-* A :code:`save(self, ..)` method, which khows how to create or update an instance.
+* A :code:`save(self, ..)` method, which knows how to create or update an instance.
 * A :code:`create(self, validated_data, ..)` method which knows how to create an instance. This method can be overriden to customize the create behaviour.
 * A :code:`update(self, instance, validated_data, ..)` method which knows how to update an instance. This method can be overriden to customize the update behaviour.
 
