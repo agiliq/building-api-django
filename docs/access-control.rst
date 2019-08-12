@@ -278,6 +278,7 @@ We have two remaining things we need to enforce.
 We will do that by overriding :code:`PollViewSet.destroy` and :code:`ChoiceList.post`.
 
 .. code-block:: python
+
     # ...
     from rest_framework.exceptions import PermissionDenied
 
