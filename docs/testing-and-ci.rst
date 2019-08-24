@@ -21,7 +21,7 @@ Syntax for Post request:
 .. code-block:: python
 
     factory = APIRequestFactory()
-    request = factory.post(uri, post data)
+    request = factory.post(url, post data)
 
 Lets add a test for the polls list.
 
@@ -77,7 +77,7 @@ And it will display the below message.
     FAILED (failures=1)
     Destroying test database for alias 'default'...
 
-Ouch! Our test failed. This happened because the view is not accessable without authentication. So we need to create a user and test the view after getting authenticated.
+Ouch! Our test failed. This happened because the view is not accessible without authentication. So we need to create a user and test the view after getting authenticated.
 
 
 Testing APIs with authentication
