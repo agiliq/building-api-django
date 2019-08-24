@@ -21,7 +21,7 @@ Syntax for Post request:
 .. code-block:: python
 
     factory = APIRequestFactory()
-    request = factory.post(url, post data)
+    request = factory.post(uri, post data)
 
 Lets add a test for the polls list.
 
