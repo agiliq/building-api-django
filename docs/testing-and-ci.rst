@@ -77,7 +77,7 @@ And it will display the below message.
     FAILED (failures=1)
     Destroying test database for alias 'default'...
 
-Ouch! Our test failed. This happened because the view is not accessable without authentication. So we need to create a user and test the view after getting authenticated.
+Ouch! Our test failed. This happened because the view is not accessible without authentication. So we need to create a user and test the view after getting authenticated.
 
 
 Testing APIs with authentication
@@ -139,7 +139,7 @@ You should get this response
 Using :code:`APIClient`
 --------------------------
 
-The same test can be written using :code:`APIClient`. It has :code:`get`, :code:`.post` and family. Unlike creating requests first, with :code:`APIClient` you can GET ot POST to a url directly and get a response.
+The same test can be written using :code:`APIClient`. It has :code:`get`, :code:`.post` and family. Unlike creating requests first, with :code:`APIClient` you can GET or POST to a url directly and get a response.
 
 Add a test like this:
 
@@ -218,7 +218,7 @@ Voilà! The test passed successfully.
 :code:`.post` and create
 --------------------------------------------------
 
-We now know how to test our GET APIs. We can use the the :code:`APIClient` with :code:`.post` method this time.
+We now know how to test our GET APIs. We can use the :code:`APIClient` with :code:`.post` method this time.
 
 Let us try creating a new poll by sending the 'question', and 'created_by' parameters which are needs in the POST method. The test function looks as follows.
 
