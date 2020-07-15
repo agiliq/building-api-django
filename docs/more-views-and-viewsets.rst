@@ -166,7 +166,7 @@ This is what it will look like:
 
 
     router = DefaultRouter()
-    router.register('polls', PollViewSet, base_name='polls')
+    router.register('polls', PollViewSet, basename='polls')
 
 
     urlpatterns = [
