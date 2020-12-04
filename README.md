@@ -26,3 +26,5 @@ Chapters
 * [Authentication and access control with DRF](http://books.agiliq.com/projects/django-api-polls-tutorial/en/latest/chapter3.html)
 * [Testing and CI: Introduction to Django testing, language agnostic API testing and CircleCI](http://books.agiliq.com/projects/django-api-polls-tutorial/en/latest/chapter4.html)
 * Consuming and collaborating with API: Introduce Postman, ngrok, angular
+
+WIP: Building on docker
