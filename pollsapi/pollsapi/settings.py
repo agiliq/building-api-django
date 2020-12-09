@@ -25,7 +25,7 @@ SECRET_KEY = 'n*z@*&0ein2+poiu$rhkv2c0a@^2gbzg=g!_e%+dz#2ik5f$g2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -86,9 +86,13 @@ WSGI_APPLICATION = 'pollsapi.wsgi.application'
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("POSTGRES_NAME", "polls_serverless"),
+        "USER": os.getenv("POSTGRES_USER", "postgres"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "ymtTXN5DW86AD#0Bi*^XwBtPp%2Qre7g"),
+        "HOST": os.getenv("POSTGRES_HOST", "polls-serverless.cluster-cnpoivuzlgpe.ap-southeast-1.rds.amazonaws.com"),
+        "PORT": 5432,
     }
 }
 
