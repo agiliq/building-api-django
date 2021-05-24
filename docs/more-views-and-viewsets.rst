@@ -13,8 +13,8 @@ We have three API endpoints
 They get the work done, but we can make our API more intuitive by nesting them correctly. Our redesigned urls look like this:
 
 - :code:`/polls/` and :code:`/polls/<pk>`
-- :code:`/polls/<pk>/choices/` to GET the choices for a specific poll, and to create choices for a specific poll. (Idenitfied by the :code:`<pk>`)
-- :code:`/polls/<pk>/choices/<choice_pk>/vote/` - To vote for the choice identified by :code:`<choice_pk>` under poll with :code:`<pk>`.
+- :code:`/polls/<pk>/choices/` - to GET the choices for a specific poll, and to create choices for a specific poll. (Identified by the :code:`<pk>`)
+- :code:`/polls/<pk>/choices/<choice_pk>/vote/` - to vote for the choice identified by :code:`<choice_pk>` under poll with :code:`<pk>`.
 
 Changing the views
 -----------------------------
@@ -86,7 +86,7 @@ You can see the changes by doing a GET to :code:`http://localhost:8000/polls/1/c
         }
     ]
 
-You can vote for choices 2, of poll 1 by doing a POST to :code:`http://localhost:8000/polls/1/choices/2/vote/` with data :code:`{"voted_by": 1}`.
+You can vote for choice 2 of poll 1 by doing a POST to :code:`http://localhost:8000/polls/1/choices/2/vote/` with data :code:`{"voted_by": 1}`.
 
 .. code-block:: json
 
@@ -120,7 +120,7 @@ Lets get back to :code:`ChoiceList`.
 From the urls, we pass on :code:`pk` to :code:`ChoiceList`. We override the :code:`get_queryset` method, to filter on choices with this :code:`poll_id`, and let DRF handle the rest.
 
 
-And for :code:`CreateVote`,
+And for :code:`CreateVote`:
 
 .. code-block:: python
 
@@ -146,14 +146,27 @@ And for :code:`CreateVote`,
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-We pass on poll id and choice id. We subclass this from :code:`APIView`, rather than a generic view, because we competely customize the behaviour. This is similar to our earlier :code:`APIView`, where in we are passing the data to a serializer, and saving or returning an error depending on whether the serializer is valid.
+We pass on poll id and choice id. We subclass this from :code:`APIView`, rather than a generic view, because we completely customize the behaviour. This is similar to our earlier :code:`APIView`, wherein we are passing the data to a serializer, and saving or returning an error depending on whether the serializer is valid.
 
 Introducing Viewsets and Routers
 -----------------------------------
 
-Our urls are looking good, and we have a views with very little code duplication, but we can do better.
+Our urls are looking good, and we have views with very little code duplication, but we can do better.
 
-The :code:`/polls/` and :code:`/polls/<pk>/` urls require two view classes, with the same serializer and base queryset. We can group them into a viewset, and connect them to the urls using a router.
+Recall that the :code:`/polls/` and :code:`/polls/<pk>/` urls require two view classes, `PollList` and `PollDetail`, with the same code for serializer and base queryset. 
+
+```py
+class PollList(generics.ListCreateAPIView):
+    queryset = Poll.objects.all()
+    serializer_class = PollSerializer
+
+
+class PollDetail(generics.RetrieveDestroyAPIView):
+    queryset = Poll.objects.all()
+    serializer_class = PollSerializer
+```
+
+We can group these classes into a viewset, and connect them to the urls using a router.
 
 This is what it will look like:
 
@@ -203,7 +216,7 @@ We have seen 4 ways to build API views until now
 
 So which one should you use when? My rule of thumb is,
 
-- Use :code:`viewsets.ModelViewSet` when you are going to allow all or most of CRUD operations on a model.
+- Use :code:`viewsets.ModelViewSet` when you are going to allow all or most of the CRUD operations on a model.
 - Use :code:`generics.*` when you only want to allow some operations on a model
 - Use :code:`APIView` when you want to completely customize the behaviour.
 
