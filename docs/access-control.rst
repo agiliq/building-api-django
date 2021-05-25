@@ -5,20 +5,20 @@ In this chapter, we will add access control to our APIs,
 and add APIs to create and authenticate users.
 
 Right now our APIs are completely permissive. Anyone can create, access and delete anything.
-We want to add these access controls.
+We want to add these access controls:
 
 
 - A user must be authenticated to access a poll or the list of polls.
-- Only an authenticated users can create a poll.
+- Only an authenticated user can create a poll.
 - Only an authenticated user can create a choice.
 - Authenticated users can create choices only for polls they have created.
 - Authenticated users can delete only polls they have created.
-- Only an authenticated user can vote. Users can vote for other people's polls.
+- Only an authenticated user can vote. Authenticated users can vote on other people's polls.
 
-To enable the access control, we need to add two more APIs
+To enable the access control, we need to add two more APIs:
 
-- API to create a user, we will call this endpoint :code:`/users/`
-- API to verify a user and get a token to identify them, we will call this endpoint :code:`/login/`
+- API to create a user. We will call this endpoint :code:`/users/`
+- API to verify a user and get a token to identify them. We will call this endpoint :code:`/login/`
 
 
 
@@ -26,7 +26,7 @@ Creating a user
 --------------------------
 
 
-We will add an user serializer, which will allow creating. Add the following code to :code:`serializers.py`.
+We will add a user serializer, which will allow creating. Add the following code to :code:`serializers.py`.
 
 .. code-block:: python
 
@@ -50,7 +50,7 @@ We will add an user serializer, which will allow creating. Add the following cod
             user.save()
             return user
 
-We have overriden the ModelSerializer method's :code:`create()` to save the :code:`User` instances. We ensure that we set the password correctly using :code:`user.set_password`, rather than setting the raw password as the hash. We also don't want to get back the password in response which we ensure using :code:`extra_kwargs = {'password': {'write_only': True}}`.
+We have overriden the ModelSerializer's :code:`create()` method to save the :code:`User` instances. We ensure that we set the password correctly using :code:`user.set_password()`, rather than setting the raw password as the hash. We also don't want to get back the password in the response which we ensure using :code:`extra_kwargs = {'password': {'write_only': True}}`.
 
 Let us also add views to the User Serializer for creating the user and connect it to the urls.py
 
@@ -84,7 +84,7 @@ We can test this api by posting to :code:`/users/` with this json.
         "password": "FiveThirtyEight"
     }
 
-Which give back this response.
+Doing so gives back this response.
 
 .. code-block:: json
 
@@ -93,7 +93,7 @@ Which give back this response.
         "email": "nate.silver@example.com"
     }
 
-Try posting the same json, and you will get a error response (HTTP status code 400)
+Try posting the same json, and you will get an error response (HTTP status code 400)
 
 .. code-block:: json
 
@@ -107,7 +107,7 @@ Try posting the same json, and you will get a error response (HTTP status code 4
 Authentication scheme setup
 -----------------------------
 
-With Django Rest Framework, we can set up a default authentication scheme which is applied to all views using :code:`DEFAULT_AUTHENTICATION_CLASSES`. We will use the token authentication in this tutorial. In your settings.py, add this.
+With Django Rest Framework, we can set up a default authentication scheme which is applied to all views using :code:`DEFAULT_AUTHENTICATION_CLASSES`. We will use token authentication in this tutorial. In your settings.py, add this.
 
 .. code-block:: python
 
@@ -149,13 +149,13 @@ Also, dont forget to give exemption to :code:`UserCreate` view for authenticatio
         permission_classes = ()
         serializer_class = UserSerializer
 
-Note the :code:`authentication_classes = ()` and :code:`permission_classes = ()` to exempt :code:`UserCreate` from global authentication scheme.
+Note the :code:`authentication_classes = ()` and :code:`permission_classes = ()` statements which exempt :code:`UserCreate` from the global authentication scheme.
 
-We want to ensure that tokens are created when user is created in :code:`UserCreate` view, so we update the :code:`UserSerializer`. Change your :code:`serializers.py` like this
+To ensure that tokens are created when a user is created in the :code:`UserCreate` view, we need to update the :code:`UserSerializer`. Edit your :code:`serializers.py` to accomodate this change.
 
 .. code-block:: python
 
-    from rest_framework.authtoken.models import Token
+    from rest_framework.authtoken.models import Token  # new
 
     class UserSerializer(serializers.ModelSerializer):
 
@@ -171,7 +171,7 @@ We want to ensure that tokens are created when user is created in :code:`UserCre
             )
             user.set_password(validated_data['password'])
             user.save()
-            Token.objects.create(user=user)
+            Token.objects.create(user=user)  # new
             return user
 
 
@@ -179,7 +179,7 @@ We want to ensure that tokens are created when user is created in :code:`UserCre
 The login API
 -----------------------------
 
-Since we have added :code:`rest_framework.authentication.TokenAuthentication`, we will need to set a header like this :code:`Authorization: Token c2a84953f47288ac1943a3f389a6034e395ad940` to auhenticate. We need an API where a user can give their username and password, and get a token back.
+Since we have added :code:`rest_framework.authentication.TokenAuthentication` in **settings.py**, we will need to set a header like this :code:`Authorization: Token c2a84953f47288ac1943a3f389a6034e395ad940` to auhenticate. We need an API where a user can give their username and password, and get a token back.
 
 We will not be adding a serializer, because we never save a token using this API.
 
@@ -233,7 +233,7 @@ Do a POST with a correct username and password, and you will get a response like
     }
 
 
-POST with a incorrect username and password, and you will get a response like this, with a HTTP status of 400.
+Do a POST with a incorrect username and password, and you will get a response like this, with a HTTP status of 400.
 
 .. code-block:: json
 
@@ -241,7 +241,7 @@ POST with a incorrect username and password, and you will get a response like th
         "error": "Wrong Credentials"
     }
 
-Another way to create this login endpoint is using :code:`obtain_auth_token` method provide by DRF
+Another way to create this login endpoint is using the :code:`obtain_auth_token` method provided by DRF.
 
 .. code-block:: python
 
@@ -299,13 +299,13 @@ We will do that by overriding :code:`PollViewSet.destroy` and :code:`ChoiceList.
         def post(self, request, *args, **kwargs):
             poll = Poll.objects.get(pk=self.kwargs["pk"])
             if not request.user == poll.created_by:
-                raise PermissionDenied("You can not create choice for this poll.")
+                raise PermissionDenied("You can not create a choice for this poll.")
             return super().post(request, *args, **kwargs)
 
 In both cases, we are checking :code:`request.user` against the expected user, and raising
 a :code:`PermissionDenied` error if it does not match.
 
-You can check this by doing a DELETE on someone elses :code:`Poll`. You will get an error with :code:`HTTP 403 Forbidden` and response.
+You can check this by doing a DELETE on someone elses :code:`Poll`. You will get an error with :code:`HTTP 403 Forbidden` and the following response:
 
 
 .. code-block:: json
@@ -315,7 +315,7 @@ You can check this by doing a DELETE on someone elses :code:`Poll`. You will get
     }
 
 
-Similarly, trying to create choice for someone else's :code:`Poll` will get an error with :code:`HTTP 403 Forbidden` and response
+Similarly, trying to create a choice for someone else's :code:`Poll` will get an error with :code:`HTTP 403 Forbidden` and the following response:
 
 .. code-block:: json
 
