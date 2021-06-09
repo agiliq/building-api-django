@@ -74,7 +74,7 @@ Similarly, `polls_detail` gets a specific Poll using :code:`get_object_or_404(Po
 Using the API
 ++++++++++++++++++++++++
 
-You can now access the API using curl, wget, postman, browser or any other API consuming tools. Here us the response with curl.
+You can now access the API using curl, wget, postman, browser or any other API consuming tools. Here is the response with curl.
 
 .. code-block:: bash
 
