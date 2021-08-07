@@ -20,7 +20,7 @@ Earliest in order, to create a project we should move to the directory where we 
 
     django-admin startproject pollsapi
 
-This command gives us a 'pollsapi' directoy. The contents of this directory look like this::
+This command gives us a 'pollsapi' directory. The contents of this directory look like this::
 
     manage.py
 
