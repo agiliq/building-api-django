@@ -26,7 +26,7 @@ Creating a user
 --------------------------
 
 
-We will add an user serializer, which will allow creating. Add the following code to :code:`serializers.py`.
+We will add a user serializer, which will allow creating. Add the following code to :code:`serializers.py`.
 
 .. code-block:: python
 
