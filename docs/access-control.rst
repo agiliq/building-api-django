@@ -179,7 +179,7 @@ We want to ensure that tokens are created when user is created in :code:`UserCre
 The login API
 -----------------------------
 
-Since we have added :code:`rest_framework.authentication.TokenAuthentication`, we will need to set a header like this :code:`Authorization: Token c2a84953f47288ac1943a3f389a6034e395ad940` to auhenticate. We need an API where a user can give their username and password, and get a token back.
+Since we have added :code:`rest_framework.authentication.TokenAuthentication`, we will need to set a header like this :code:`Authorization: Token c2a84953f47288ac1943a3f389a6034e395ad940` to authenticate. We need an API where a user can give their username and password, and get a token back.
 
 We will not be adding a serializer, because we never save a token using this API.
 
