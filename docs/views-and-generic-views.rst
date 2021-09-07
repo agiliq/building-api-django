@@ -9,7 +9,7 @@ Creating Views with :code:`APIView`
 
 To start with, we will use the :code:`APIView` to build the polls list and poll detail API we built in the chapter, :doc:`apis-without-drf`.
 
-Add this to a new file :code:`polls/apiviews.py`
+Add this to a new file :code:`polls/apiviews.py`.
 
 .. code-block:: python
 
@@ -47,13 +47,13 @@ And change your :code:`urls.py` to
         path("polls/<int:pk>/", PollDetail.as_view(), name="polls_detail")
     ]
 
-DRF comes with a browsable api, so you can directly open :code:`http://localhost:8000/polls/` in the browser. It looks like this
+DRF comes with a browsable api, so you can directly open :code:`http://localhost:8000/polls/` in the browser. It looks like this:
 
 
 .. image:: browsable-api-poll-details.png
 
 
-You can now do an :code:`options` request to `/polls/`, which gives
+You can now do an :code:`options` request to `/polls/`, which gives:
 
 .. code-block:: json
 
@@ -81,11 +81,11 @@ Using DRF generic views to simplify code
 -----------------------------------------
 
 
-The :code:`PollList` and :code:`PollDetail` get the work done, but there are bunch of common operations, we can do it in abstract away.
+The :code:`PollList` and :code:`PollDetail` get the work done, but there are a bunch of common operations, we can do it in abstract away.
 
 The generic views of Django Rest Framework help us in code reusablity. They infer the response format and allowed methods from the serializer class and base class.
 
-Change your :code:`apiviews.py` to the below code, and leave urls.py as is.
+Change your :code:`apiviews.py` to the code below, and leave urls.py as is.
 
 .. code-block:: python
 
@@ -105,9 +105,9 @@ Change your :code:`apiviews.py` to the below code, and leave urls.py as is.
         queryset = Poll.objects.all()
         serializer_class = PollSerializer
 
-With this change, GET requests to :code:`/polls/` and :code:`/polls/<pk>/`, continue to work as was, but we have a more data available with OPTIONS.
+With this change, GET requests to :code:`/polls/` and :code:`/polls/<pk>/`, continue to work as before, but we have more data available with OPTIONS.
 
-Do an OPTIONs request to :code:`/polls/`, and you will get a response like this.
+Do an OPTIONs request to :code:`/polls/`, and you will get a response like this:
 
 .. code-block:: javascript
 
@@ -237,7 +237,7 @@ Create some choices by POSTing to :code:`/choices/`.
         "poll": 2
     }
 
-The response looks like this
+The response looks like this:
 
 .. code-block:: json
 
@@ -248,7 +248,7 @@ The response looks like this
         "poll": 2
     }
 
-You can also retrieve the :code:`Poll` to by doing a :code:`GET` to :code:`/polls/<pk>/`. You should get something like this
+You can also retrieve the :code:`Poll` to by doing a :code:`GET` to :code:`/polls/<pk>/`. You should get something like this:
 
 .. code-block:: json
 
@@ -273,7 +273,7 @@ You can also retrieve the :code:`Poll` to by doing a :code:`GET` to :code:`/poll
         "created_by": 1
     }
 
-If you make a mistake while POSTing, the API will warn you. POST a json with :code:`choice_text` missing to :code:`/choices/`.
+If you make a mistake while POSTing, the API will warn you. Let's say you POST a json with :code:`choice_text` missing to :code:`/choices/`.
 
 .. code-block:: json
 
@@ -281,7 +281,7 @@ If you make a mistake while POSTing, the API will warn you. POST a json with :co
         "poll": 2
     }
 
-You will get a response like this
+You will get a response like this:
 
 .. code-block:: json
 
@@ -291,9 +291,9 @@ You will get a response like this
         ]
     }
 
-Check the status code is 400 Bad Request.
+Check that the status code is 400 Bad Request.
 
 Next Steps
 --------------
 
-We have working API at this point, but we can simplify our API with a better URL design and remove some code duplication using viewsets. We will be doing that in the next chapter.
+We have a working API at this point, but we can simplify our API with a better URL design and remove some code duplication using viewsets. We will be doing that in the next chapter.
