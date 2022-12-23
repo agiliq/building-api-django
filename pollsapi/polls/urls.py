@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .apiviews import PollViewSet, ChoiceList, CreateVote, UserCreate, LoginView
+from .apiviews import PollViewSet, ChoiceList, CreateVote, UserCreate, LoginView, MyOwnView
 
 from rest_framework.routers import DefaultRouter
 
@@ -22,6 +22,7 @@ urlpatterns = [
     path("polls/<int:pk>/choices/<int:choice_pk>/vote/", CreateVote.as_view(), name="polls_list"),
     path(r'docs/', include_docs_urls(title='Polls API')),
     path(r'swagger-docs/', schema_view),
+    path('my-own-view/', MyOwnView.as_view(), name = "demo")
 ]
 
 urlpatterns += router.urls

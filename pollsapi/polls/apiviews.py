@@ -4,6 +4,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from django.contrib.auth import authenticate
 
@@ -64,3 +66,7 @@ class LoginView(APIView):
         else:
             return Response({"error": "Wrong Credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
+class MyOwnView(APIView):
+    @permission_classes([AllowAny])
+    def get(self, request):
+        return Response({'some': 'data'})
