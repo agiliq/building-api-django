@@ -37,7 +37,7 @@ Lets add a test for the polls list.
         def setUp(self):
             self.factory = APIRequestFactory()
             self.view = apiviews.PollViewSet.as_view({'get': 'list'})
-            self.uri = '/polls/'
+            self.uri = '/polls/polls/'
 
         def test_list(self):
             request = self.factory.get(self.uri)
